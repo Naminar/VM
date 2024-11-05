@@ -1,0 +1,872 @@
+[
+    {
+        "opcodeHex": "0x00",
+        "mnemonic": "nop",
+        "description": "Do nothing",
+        "opcodeBin": "00000000"
+    },
+    {
+        "opcodeHex": "0x01",
+        "mnemonic": "imov",
+        "description": "mov int from local variable to variable",
+        "opcodeBin": "00000001"
+    },
+    {
+        "opcodeHex": "0x02",
+        "mnemonic": "lmov",
+        "description": "mov long from local variable to variable",
+        "opcodeBin": "00000010"
+    },
+    {
+        "opcodeHex": "0x03",
+        "mnemonic": "fmov",
+        "description": "mov float from local variable to variable",
+        "opcodeBin": "00000011"
+    },
+    {
+        "opcodeHex": "0x04",
+        "mnemonic": "dmov",
+        "description": "mov double from local variable to variable",
+        "opcodeBin": "00000100"
+    },
+    {
+        "opcodeHex": "0x05",
+        "mnemonic": "amov",
+        "description": "mov reference from local variable to variable",
+        "opcodeBin": "00000101"
+    },
+    {
+        "opcodeHex": "0x36",
+        "mnemonic": "istore",
+        "description": "Store int into local variable",
+        "opcodeBin": "00110110"
+    },
+    {
+        "opcodeHex": "0x37",
+        "mnemonic": "lstore",
+        "description": "Store long into local variable",
+        "opcodeBin": "00110111"
+    },
+    {
+        "opcodeHex": "0x38",
+        "mnemonic": "fstore",
+        "description": "Store float into local variable",
+        "opcodeBin": "00111000"
+    },
+    {
+        "opcodeHex": "0x39",
+        "mnemonic": "dstore",
+        "description": "Store double into local variable",
+        "opcodeBin": "00111001"
+    },
+    {
+        "opcodeHex": "0x3a",
+        "mnemonic": "astore",
+        "description": "Store reference into local variable",
+        "opcodeBin": "00111010"
+    },
+    {
+        "opcodeHex": "0x3b",
+        "mnemonic": "istore_0",
+        "description": "Store int into local variable 0",
+        "opcodeBin": "00111011"
+    },
+    {
+        "opcodeHex": "0x3c",
+        "mnemonic": "istore_1",
+        "description": "Store int into local variable 1",
+        "opcodeBin": "00111100"
+    },
+    {
+        "opcodeHex": "0x3d",
+        "mnemonic": "istore_2",
+        "description": "Store int into local variable 2",
+        "opcodeBin": "00111101"
+    },
+    {
+        "opcodeHex": "0x3e",
+        "mnemonic": "istore_3",
+        "description": "Store int into local variable 3",
+        "opcodeBin": "00111110"
+    },
+    {
+        "opcodeHex": "0x3f",
+        "mnemonic": "lstore_0",
+        "description": "Store long into local variable 0",
+        "opcodeBin": "00111111"
+    },
+    {
+        "opcodeHex": "0x40",
+        "mnemonic": "lstore_1",
+        "description": "Store long into local variable 1",
+        "opcodeBin": "01000000"
+    },
+    {
+        "opcodeHex": "0x41",
+        "mnemonic": "lstore_2",
+        "description": "Store long into local variable 2",
+        "opcodeBin": "01000001"
+    },
+    {
+        "opcodeHex": "0x42",
+        "mnemonic": "lstore_3",
+        "description": "Store long into local variable 3",
+        "opcodeBin": "01000010"
+    },
+    {
+        "opcodeHex": "0x43",
+        "mnemonic": "fstore_0",
+        "description": "Store float into local variable 0",
+        "opcodeBin": "01000011"
+    },
+    {
+        "opcodeHex": "0x44",
+        "mnemonic": "fstore_1",
+        "description": "Store float into local variable 1",
+        "opcodeBin": "01000100"
+    },
+    {
+        "opcodeHex": "0x45",
+        "mnemonic": "fstore_2",
+        "description": "Store float into local variable 2",
+        "opcodeBin": "01000101"
+    },
+    {
+        "opcodeHex": "0x46",
+        "mnemonic": "fstore_3",
+        "description": "Store float into local variable 3",
+        "opcodeBin": "01000110"
+    },
+    {
+        "opcodeHex": "0x47",
+        "mnemonic": "dstore_0",
+        "description": "Store double into local variable 0",
+        "opcodeBin": "01000111"
+    },
+    {
+        "opcodeHex": "0x48",
+        "mnemonic": "dstore_1",
+        "description": "Store double into local variable 1",
+        "opcodeBin": "01001000"
+    },
+    {
+        "opcodeHex": "0x49",
+        "mnemonic": "dstore_2",
+        "description": "Store double into local variable 2",
+        "opcodeBin": "01001001"
+    },
+    {
+        "opcodeHex": "0x4a",
+        "mnemonic": "dstore_3",
+        "description": "Store double into local variable 3",
+        "opcodeBin": "01001010"
+    },
+    {
+        "opcodeHex": "0x4b",
+        "mnemonic": "astore_0",
+        "description": "Store reference into local variable 0",
+        "opcodeBin": "01001011"
+    },
+    {
+        "opcodeHex": "0x4c",
+        "mnemonic": "astore_1",
+        "description": "Store reference into local variable 1",
+        "opcodeBin": "01001100"
+    },
+    {
+        "opcodeHex": "0x4d",
+        "mnemonic": "astore_2",
+        "description": "Store reference into local variable 2",
+        "opcodeBin": "01001101"
+    },
+    {
+        "opcodeHex": "0x4e",
+        "mnemonic": "astore_3",
+        "description": "Store reference into local variable 3",
+        "opcodeBin": "01001110"
+    },
+    {
+        "opcodeHex": "0x4f",
+        "mnemonic": "iastore",
+        "description": "Store into int array",
+        "opcodeBin": "01001111"
+    },
+    {
+        "opcodeHex": "0x50",
+        "mnemonic": "lastore",
+        "description": "Store into long array",
+        "opcodeBin": "01010000"
+    },
+    {
+        "opcodeHex": "0x51",
+        "mnemonic": "fastore",
+        "description": "Store into float array",
+        "opcodeBin": "01010001"
+    },
+    {
+        "opcodeHex": "0x52",
+        "mnemonic": "dastore",
+        "description": "Store into double array",
+        "opcodeBin": "01010010"
+    },
+    {
+        "opcodeHex": "0x53",
+        "mnemonic": "aastore",
+        "description": "Store into reference array",
+        "opcodeBin": "01010011"
+    },
+    {
+        "opcodeHex": "0x54",
+        "mnemonic": "bastore",
+        "description": "Store into byte or boolean array",
+        "opcodeBin": "01010100"
+    },
+    {
+        "opcodeHex": "0x55",
+        "mnemonic": "castore",
+        "description": "Store into char array",
+        "opcodeBin": "01010101"
+    },
+    {
+        "opcodeHex": "0x56",
+        "mnemonic": "sastore",
+        "description": "Store into short array",
+        "opcodeBin": "01010110"
+    },
+    {
+        "opcodeHex": "0x60",
+        "mnemonic": "iadd",
+        "description": "Add two ints",
+        "opcodeBin": "01100000"
+    },
+    {
+        "opcodeHex": "0x61",
+        "mnemonic": "ladd",
+        "description": "Add two longs",
+        "opcodeBin": "01100001"
+    },
+    {
+        "opcodeHex": "0x62",
+        "mnemonic": "fadd",
+        "description": "Add two floats",
+        "opcodeBin": "01100010"
+    },
+    {
+        "opcodeHex": "0x63",
+        "mnemonic": "dadd",
+        "description": "Add two doubles",
+        "opcodeBin": "01100011"
+    },
+    {
+        "opcodeHex": "0x64",
+        "mnemonic": "isub",
+        "description": "Subtract two ints",
+        "opcodeBin": "01100100"
+    },
+    {
+        "opcodeHex": "0x65",
+        "mnemonic": "lsub",
+        "description": "Subtract two longs",
+        "opcodeBin": "01100101"
+    },
+    {
+        "opcodeHex": "0x66",
+        "mnemonic": "fsub",
+        "description": "Subtract two floats",
+        "opcodeBin": "01100110"
+    },
+    {
+        "opcodeHex": "0x67",
+        "mnemonic": "dsub",
+        "description": "Subtract two doubles",
+        "opcodeBin": "01100111"
+    },
+    {
+        "opcodeHex": "0x68",
+        "mnemonic": "imul",
+        "description": "Multiply two ints",
+        "opcodeBin": "01101000"
+    },
+    {
+        "opcodeHex": "0x69",
+        "mnemonic": "lmul",
+        "description": "Multiply two longs",
+        "opcodeBin": "01101001"
+    },
+    {
+        "opcodeHex": "0x6a",
+        "mnemonic": "fmul",
+        "description": "Multiply two floats",
+        "opcodeBin": "01101010"
+    },
+    {
+        "opcodeHex": "0x6b",
+        "mnemonic": "dmul",
+        "description": "Multiply two doubles",
+        "opcodeBin": "01101011"
+    },
+    {
+        "opcodeHex": "0x6c",
+        "mnemonic": "idiv",
+        "description": "Divide two ints",
+        "opcodeBin": "01101100"
+    },
+    {
+        "opcodeHex": "0x6d",
+        "mnemonic": "ldiv",
+        "description": "Divide two longs",
+        "opcodeBin": "01101101"
+    },
+    {
+        "opcodeHex": "0x6e",
+        "mnemonic": "fdiv",
+        "description": "Divide two floats",
+        "opcodeBin": "01101110"
+    },
+    {
+        "opcodeHex": "0x6f",
+        "mnemonic": "ddiv",
+        "description": "Divide two doubles",
+        "opcodeBin": "01101111"
+    },
+    {
+        "opcodeHex": "0x70",
+        "mnemonic": "irem",
+        "description": "Remainder of two ints",
+        "opcodeBin": "01110000"
+    },
+    {
+        "opcodeHex": "0x71",
+        "mnemonic": "lrem",
+        "description": "Remainder of two longs",
+        "opcodeBin": "01110001"
+    },
+    {
+        "opcodeHex": "0x72",
+        "mnemonic": "frem",
+        "description": "Remainder of two floats",
+        "opcodeBin": "01110010"
+    },
+    {
+        "opcodeHex": "0x73",
+        "mnemonic": "drem",
+        "description": "Remainder of two doubles",
+        "opcodeBin": "01110011"
+    },
+    {
+        "opcodeHex": "0x74",
+        "mnemonic": "ineg",
+        "description": "Negate int",
+        "opcodeBin": "01110100"
+    },
+    {
+        "opcodeHex": "0x75",
+        "mnemonic": "lneg",
+        "description": "Negate long",
+        "opcodeBin": "01110101"
+    },
+    {
+        "opcodeHex": "0x76",
+        "mnemonic": "fneg",
+        "description": "Negate float",
+        "opcodeBin": "01110110"
+    },
+    {
+        "opcodeHex": "0x77",
+        "mnemonic": "dneg",
+        "description": "Negate double",
+        "opcodeBin": "01110111"
+    },
+    {
+        "opcodeHex": "0x78",
+        "mnemonic": "ishl",
+        "description": "Shift left int",
+        "opcodeBin": "01111000"
+    },
+    {
+        "opcodeHex": "0x79",
+        "mnemonic": "lshl",
+        "description": "Shift left long",
+        "opcodeBin": "01111001"
+    },
+    {
+        "opcodeHex": "0x7a",
+        "mnemonic": "ishr",
+        "description": "Shift right int",
+        "opcodeBin": "01111010"
+    },
+    {
+        "opcodeHex": "0x7b",
+        "mnemonic": "lshr",
+        "description": "Shift right long",
+        "opcodeBin": "01111011"
+    },
+    {
+        "opcodeHex": "0x7c",
+        "mnemonic": "iushr",
+        "description": "Logical shift right int",
+        "opcodeBin": "01111100"
+    },
+    {
+        "opcodeHex": "0x7d",
+        "mnemonic": "lushr",
+        "description": "Logical shift right long",
+        "opcodeBin": "01111101"
+    },
+    {
+        "opcodeHex": "0x7e",
+        "mnemonic": "iand",
+        "description": "Boolean AND int",
+        "opcodeBin": "01111110"
+    },
+    {
+        "opcodeHex": "0x7f",
+        "mnemonic": "land",
+        "description": "Boolean AND long",
+        "opcodeBin": "01111111"
+    },
+    {
+        "opcodeHex": "0x80",
+        "mnemonic": "ior",
+        "description": "Boolean OR int",
+        "opcodeBin": "10000000"
+    },
+    {
+        "opcodeHex": "0x81",
+        "mnemonic": "lor",
+        "description": "Boolean OR long",
+        "opcodeBin": "10000001"
+    },
+    {
+        "opcodeHex": "0x82",
+        "mnemonic": "ixor",
+        "description": "Boolean XOR int",
+        "opcodeBin": "10000010"
+    },
+    {
+        "opcodeHex": "0x83",
+        "mnemonic": "lxor",
+        "description": "Boolean XOR long",
+        "opcodeBin": "10000011"
+    },
+    {
+        "opcodeHex": "0x84",
+        "mnemonic": "iinc",
+        "description": "Increment local variable by constant",
+        "opcodeBin": "10000100"
+    },
+    {
+        "opcodeHex": "0x85",
+        "mnemonic": "i2l",
+        "description": "Convert int to long",
+        "opcodeBin": "10000101"
+    },
+    {
+        "opcodeHex": "0x86",
+        "mnemonic": "i2f",
+        "description": "Convert int to float",
+        "opcodeBin": "10000110"
+    },
+    {
+        "opcodeHex": "0x87",
+        "mnemonic": "i2d",
+        "description": "Convert int to double",
+        "opcodeBin": "10000111"
+    },
+    {
+        "opcodeHex": "0x88",
+        "mnemonic": "l2i",
+        "description": "Convert long to int",
+        "opcodeBin": "10001000"
+    },
+    {
+        "opcodeHex": "0x89",
+        "mnemonic": "l2f",
+        "description": "Convert long to float",
+        "opcodeBin": "10001001"
+    },
+    {
+        "opcodeHex": "0x8a",
+        "mnemonic": "l2d",
+        "description": "Convert long to double",
+        "opcodeBin": "10001010"
+    },
+    {
+        "opcodeHex": "0x8b",
+        "mnemonic": "f2i",
+        "description": "Convert float to int",
+        "opcodeBin": "10001011"
+    },
+    {
+        "opcodeHex": "0x8c",
+        "mnemonic": "f2l",
+        "description": "Convert float to long",
+        "opcodeBin": "10001100"
+    },
+    {
+        "opcodeHex": "0x8d",
+        "mnemonic": "f2d",
+        "description": "Convert float to double",
+        "opcodeBin": "10001101"
+    },
+    {
+        "opcodeHex": "0x8e",
+        "mnemonic": "d2i",
+        "description": "Convert double to int",
+        "opcodeBin": "10001110"
+    },
+    {
+        "opcodeHex": "0x8f",
+        "mnemonic": "d2l",
+        "description": "Convert double to long",
+        "opcodeBin": "10001111"
+    },
+    {
+        "opcodeHex": "0x90",
+        "mnemonic": "d2f",
+        "description": "Convert double to float",
+        "opcodeBin": "10010000"
+    },
+    {
+        "opcodeHex": "0x91",
+        "mnemonic": "i2b",
+        "description": "Convert int to byte",
+        "opcodeBin": "10010001"
+    },
+    {
+        "opcodeHex": "0x92",
+        "mnemonic": "i2c",
+        "description": "Convert int to char",
+        "opcodeBin": "10010010"
+    },
+    {
+        "opcodeHex": "0x93",
+        "mnemonic": "i2s",
+        "description": "Convert int to short",
+        "opcodeBin": "10010011"
+    },
+    {
+        "opcodeHex": "0x94",
+        "mnemonic": "lcmp",
+        "description": "Compare long",
+        "opcodeBin": "10010100"
+    },
+    {
+        "opcodeHex": "0x95",
+        "mnemonic": "fcmpl",
+        "description": "Compare float (less)",
+        "opcodeBin": "10010101"
+    },
+    {
+        "opcodeHex": "0x96",
+        "mnemonic": "fcmpg",
+        "description": "Compare float (greater)",
+        "opcodeBin": "10010110"
+    },
+    {
+        "opcodeHex": "0x97",
+        "mnemonic": "dcmpl",
+        "description": "Compare double (less)",
+        "opcodeBin": "10010111"
+    },
+    {
+        "opcodeHex": "0x98",
+        "mnemonic": "dcmpg",
+        "description": "Compare double (greater)",
+        "opcodeBin": "10011000"
+    },
+    {
+        "opcodeHex": "0x99",
+        "mnemonic": "ifeq",
+        "description": "Branch if int comparison with zero succeeds (== 0)",
+        "opcodeBin": "10011001"
+    },
+    {
+        "opcodeHex": "0x9a",
+        "mnemonic": "ifne",
+        "description": "Branch if int comparison with zero does not succeed (!= 0)",
+        "opcodeBin": "10011010"
+    },
+    {
+        "opcodeHex": "0x9b",
+        "mnemonic": "iflt",
+        "description": "Branch if int comparison with zero is less than (< 0)",
+        "opcodeBin": "10011011"
+    },
+    {
+        "opcodeHex": "0x9c",
+        "mnemonic": "ifge",
+        "description": "Branch if int comparison with zero is greater than or equal to (>= 0)",
+        "opcodeBin": "10011100"
+    },
+    {
+        "opcodeHex": "0x9d",
+        "mnemonic": "ifgt",
+        "description": "Branch if int comparison with zero is greater than (> 0)",
+        "opcodeBin": "10011101"
+    },
+    {
+        "opcodeHex": "0x9e",
+        "mnemonic": "ifle",
+        "description": "Branch if int comparison with zero is less than or equal to (<= 0)",
+        "opcodeBin": "10011110"
+    },
+    {
+        "opcodeHex": "0x9f",
+        "mnemonic": "if_icmpeq",
+        "description": "Branch if int comparison equals (==)",
+        "opcodeBin": "10011111"
+    },
+    {
+        "opcodeHex": "0xa0",
+        "mnemonic": "if_icmpne",
+        "description": "Branch if int comparison does not equal (!=)",
+        "opcodeBin": "10100000"
+    },
+    {
+        "opcodeHex": "0xa1",
+        "mnemonic": "if_icmplt",
+        "description": "Branch if int comparison is less than (<)",
+        "opcodeBin": "10100001"
+    },
+    {
+        "opcodeHex": "0xa2",
+        "mnemonic": "if_icmpge",
+        "description": "Branch if int comparison is greater than or equal to (>=)",
+        "opcodeBin": "10100010"
+    },
+    {
+        "opcodeHex": "0xa3",
+        "mnemonic": "if_icmpgt",
+        "description": "Branch if int comparison is greater than (>)",
+        "opcodeBin": "10100011"
+    },
+    {
+        "opcodeHex": "0xa4",
+        "mnemonic": "if_icmple",
+        "description": "Branch if int comparison is less than or equal to (<=)",
+        "opcodeBin": "10100100"
+    },
+    {
+        "opcodeHex": "0xa5",
+        "mnemonic": "if_acmpeq",
+        "description": "Branch if reference comparison is equal",
+        "opcodeBin": "10100101"
+    },
+    {
+        "opcodeHex": "0xa6",
+        "mnemonic": "if_acmpne",
+        "description": "Branch if reference comparison is not equal",
+        "opcodeBin": "10100110"
+    },
+    {
+        "opcodeHex": "0xa7",
+        "mnemonic": "goto",
+        "description": "Branch always",
+        "opcodeBin": "10100111"
+    },
+    {
+        "opcodeHex": "0xa8",
+        "mnemonic": "jsr",
+        "description": "Jump to subroutine",
+        "opcodeBin": "10101000"
+    },
+    {
+        "opcodeHex": "0xa9",
+        "mnemonic": "ret",
+        "description": "Return from subroutine",
+        "opcodeBin": "10101001"
+    },
+    {
+        "opcodeHex": "0xaa",
+        "mnemonic": "tableswitch",
+        "description": "Access jump table by index and jump",
+        "opcodeBin": "10101010"
+    },
+    {
+        "opcodeHex": "0xab",
+        "mnemonic": "lookupswitch",
+        "description": "Access jump table by key match and jump",
+        "opcodeBin": "10101011"
+    },
+    {
+        "opcodeHex": "0xac",
+        "mnemonic": "ireturn",
+        "description": "Return int from method",
+        "opcodeBin": "10101100"
+    },
+    {
+        "opcodeHex": "0xad",
+        "mnemonic": "lreturn",
+        "description": "Return long from method",
+        "opcodeBin": "10101101"
+    },
+    {
+        "opcodeHex": "0xae",
+        "mnemonic": "freturn",
+        "description": "Return float from method",
+        "opcodeBin": "10101110"
+    },
+    {
+        "opcodeHex": "0xaf",
+        "mnemonic": "dreturn",
+        "description": "Return double from method",
+        "opcodeBin": "10101111"
+    },
+    {
+        "opcodeHex": "0xb0",
+        "mnemonic": "areturn",
+        "description": "Return reference from method",
+        "opcodeBin": "10110000"
+    },
+    {
+        "opcodeHex": "0xb1",
+        "mnemonic": "return",
+        "description": "Return void from method",
+        "opcodeBin": "10110001"
+    },
+    {
+        "opcodeHex": "0xb2",
+        "mnemonic": "getstatic",
+        "description": "Get static field from class",
+        "opcodeBin": "10110010"
+    },
+    {
+        "opcodeHex": "0xb3",
+        "mnemonic": "putstatic",
+        "description": "Set static field in class",
+        "opcodeBin": "10110011"
+    },
+    {
+        "opcodeHex": "0xb4",
+        "mnemonic": "getfield",
+        "description": "Fetch field from object",
+        "opcodeBin": "10110100"
+    },
+    {
+        "opcodeHex": "0xb5",
+        "mnemonic": "putfield",
+        "description": "Set field in object",
+        "opcodeBin": "10110101"
+    },
+    {
+        "opcodeHex": "0xb6",
+        "mnemonic": "invokevirtual",
+        "description": "Invoke instance method; dispatch based on class",
+        "opcodeBin": "10110110"
+    },
+    {
+        "opcodeHex": "0xb7",
+        "mnemonic": "invokespecial",
+        "description": "Invoke instance method; special handling for superclass, private, and instance initialization methods",
+        "opcodeBin": "10110111"
+    },
+    {
+        "opcodeHex": "0xb8",
+        "mnemonic": "invokestatic",
+        "description": "Invoke a static method",
+        "opcodeBin": "10111000"
+    },
+    {
+        "opcodeHex": "0xb9",
+        "mnemonic": "invokeinterface",
+        "description": "Invoke interface method",
+        "opcodeBin": "10111001"
+    },
+    {
+        "opcodeHex": "0xba",
+        "mnemonic": "invokedynamic",
+        "description": "Invoke a dynamically-computed method",
+        "opcodeBin": "10111010"
+    },
+    {
+        "opcodeHex": "0xbb",
+        "mnemonic": "new",
+        "description": "Create new object",
+        "opcodeBin": "10111011"
+    },
+    {
+        "opcodeHex": "0xbc",
+        "mnemonic": "newarray",
+        "description": "Create new array",
+        "opcodeBin": "10111100"
+    },
+    {
+        "opcodeHex": "0xbd",
+        "mnemonic": "anewarray",
+        "description": "Create new reference array",
+        "opcodeBin": "10111101"
+    },
+    {
+        "opcodeHex": "0xbe",
+        "mnemonic": "arraylength",
+        "description": "Get length of array",
+        "opcodeBin": "10111110"
+    },
+    {
+        "opcodeHex": "0xbf",
+        "mnemonic": "athrow",
+        "description": "Throw exception or error",
+        "opcodeBin": "10111111"
+    },
+    {
+        "opcodeHex": "0xc0",
+        "mnemonic": "checkcast",
+        "description": "Check whether object is of given type",
+        "opcodeBin": "11000000"
+    },
+    {
+        "opcodeHex": "0xc1",
+        "mnemonic": "instanceof",
+        "description": "Determine if object is of given type",
+        "opcodeBin": "11000001"
+    },
+    {
+        "opcodeHex": "0xc2",
+        "mnemonic": "monitorenter",
+        "description": "Enter monitor for object",
+        "opcodeBin": "11000010"
+    },
+    {
+        "opcodeHex": "0xc3",
+        "mnemonic": "monitorexit",
+        "description": "Exit monitor for object",
+        "opcodeBin": "11000011"
+    },
+    {
+        "opcodeHex": "0xc4",
+        "mnemonic": "wide",
+        "description": "Extend local variable index by additional bytes",
+        "opcodeBin": "11000100"
+    },
+    {
+        "opcodeHex": "0xc5",
+        "mnemonic": "multianewarray",
+        "description": "Create new multidimensional array",
+        "opcodeBin": "11000101"
+    },
+    {
+        "opcodeHex": "0xc6",
+        "mnemonic": "ifnull",
+        "description": "Branch if reference is null",
+        "opcodeBin": "11000110"
+    },
+    {
+        "opcodeHex": "0xc7",
+        "mnemonic": "ifnonnull",
+        "description": "Branch if reference is not null",
+        "opcodeBin": "11000111"
+    },
+    {
+        "opcodeHex": "0xc8",
+        "mnemonic": "goto_w",
+        "description": "Branch always (wide index)",
+        "opcodeBin": "11001000"
+    },
+    {
+        "opcodeHex": "0xc9",
+        "mnemonic": "jsr_w",
+        "description": "Jump to subroutine (wide index)",
+        "opcodeBin": "11001001"
+    }
+]
