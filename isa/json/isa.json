@@ -33,7 +33,7 @@
         "opcodeHex": "0x6d",
         "opcodeDec": 109,
         "mnemonic": "ldiv",
-        "description": "Divide two longs"
+        "description": "Integer division of two longs"
     },
     {
         "opcodeHex": "0x71",
@@ -42,129 +42,45 @@
         "description": "Remainder of two longs"
     },
     {
-        "opcodeHex": "0x75",
-        "opcodeDec": 117,
-        "mnemonic": "lneg",
-        "description": "Negate long"
-    },
-    {
-        "opcodeHex": "0x79",
-        "opcodeDec": 121,
-        "mnemonic": "lshl",
-        "description": "Shift left long"
-    },
-    {
-        "opcodeHex": "0x7b",
-        "opcodeDec": 123,
-        "mnemonic": "lshr",
-        "description": "Shift right long"
-    },
-    {
-        "opcodeHex": "0x7d",
-        "opcodeDec": 125,
-        "mnemonic": "lushr",
-        "description": "Logical shift right long"
-    },
-    {
-        "opcodeHex": "0x7f",
-        "opcodeDec": 127,
-        "mnemonic": "land",
-        "description": "Boolean AND long"
-    },
-    {
-        "opcodeHex": "0x81",
-        "opcodeDec": 129,
-        "mnemonic": "lor",
-        "description": "Boolean OR long"
-    },
-    {
-        "opcodeHex": "0x83",
-        "opcodeDec": 131,
-        "mnemonic": "lxor",
-        "description": "Boolean XOR long"
-    },
-    {
-        "opcodeHex": "0x84",
-        "opcodeDec": 132,
-        "mnemonic": "iinc",
-        "description": "Increment local variable by constant"
-    },
-    {
       "opcodeHex": "0x99",
       "opcodeDec": 153,
-      "mnemonic": "ifeq",
-      "description": "Branch if int comparison with zero succeeds (== 0)"
+      "mnemonic": "br_licmpeq",
+      "description": "Branch if long1 == long2"
     },
     {
       "opcodeHex": "0x9a",
       "opcodeDec": 154,
-      "mnemonic": "ifne",
-      "description": "Branch if int comparison with zero does not succeed (!= 0)"
+      "mnemonic": "br_licmpne",
+      "description": "Branch if long1 != long2"
     },
     {
       "opcodeHex": "0x9b",
       "opcodeDec": 155,
-      "mnemonic": "iflt",
-      "description": "Branch if int comparison with zero is less than (< 0)"
+      "mnemonic": "br_licmplt",
+      "description": "Branch if long1 < long2"
     },
     {
       "opcodeHex": "0x9c",
       "opcodeDec": 156,
-      "mnemonic": "ifge",
-      "description": "Branch if int comparison with zero is greater than or equal to (>= 0)"
+      "mnemonic": "br_licmpge",
+      "description": "Branch if long1 >= long2)"
     },
     {
       "opcodeHex": "0x9d",
       "opcodeDec": 157,
-      "mnemonic": "ifgt",
-      "description": "Branch if int comparison with zero is greater than (> 0)"
+      "mnemonic": "br_licmpgt",
+      "description": "Branch if long1 > long2"
     },
     {
       "opcodeHex": "0x9e",
       "opcodeDec": 158,
-      "mnemonic": "ifle",
-      "description": "Branch if int comparison with zero is less than or equal to (<= 0)"
-    },
-    {
-      "opcodeHex": "0x9f",
-      "opcodeDec": 159,
-      "mnemonic": "if_icmpeq",
-      "description": "Branch if int comparison equals (==)"
-    },
-    {
-      "opcodeHex": "0xa0",
-      "opcodeDec": 160,
-      "mnemonic": "if_icmpne",
-      "description": "Branch if int comparison does not equal (!=)"
-    },
-    {
-      "opcodeHex": "0xa1",
-      "opcodeDec": 161,
-      "mnemonic": "if_icmplt",
-      "description": "Branch if int comparison is less than (<)"
-    },
-    {
-      "opcodeHex": "0xa2",
-      "opcodeDec": 162,
-      "mnemonic": "if_icmpge",
-      "description": "Branch if int comparison is greater than or equal to (>=)"
-    },
-    {
-      "opcodeHex": "0xa3",
-      "opcodeDec": 163,
-      "mnemonic": "if_icmpgt",
-      "description": "Branch if int comparison is greater than (>)"
-    },
-    {
-      "opcodeHex": "0xa4",
-      "opcodeDec": 164,
-      "mnemonic": "if_icmple",
-      "description": "Branch if int comparison is less than or equal to (<=)"
+      "mnemonic": "br_licmple",
+      "description": "Branch if long1 <= long2"
     },
     {
       "opcodeHex": "0xa7",
       "opcodeDec": 167,
-      "mnemonic": "goto",
+      "mnemonic": "br",
       "description": "Branch always"
     },
     {
@@ -172,13 +88,5 @@
       "opcodeDec": 173,
       "mnemonic": "lreturn",
       "description": "Return long from method"
-    },
-    {
-      "opcodeHex": "0xc8",
-      "opcodeDec": 200,
-      "mnemonic": "goto_w",
-      "description": "Branch always (wide index)"
     }
-  ]
-  
-  
+]
