@@ -32,7 +32,7 @@
     {
         "opcodeHex": "0x6d",
         "mnemonic": "ldiv",
-        "description": "Divide two longs",
+        "description": "Integer division of two longs",
         "opcodeBin": "01101101"
     },
     {
@@ -42,128 +42,44 @@
         "opcodeBin": "01110001"
     },
     {
-        "opcodeHex": "0x75",
-        "mnemonic": "lneg",
-        "description": "Negate long",
-        "opcodeBin": "01110101"
-    },
-    {
-        "opcodeHex": "0x79",
-        "mnemonic": "lshl",
-        "description": "Shift left long",
-        "opcodeBin": "01111001"
-    },
-    {
-        "opcodeHex": "0x7b",
-        "mnemonic": "lshr",
-        "description": "Shift right long",
-        "opcodeBin": "01111011"
-    },
-    {
-        "opcodeHex": "0x7d",
-        "mnemonic": "lushr",
-        "description": "Logical shift right long",
-        "opcodeBin": "01111101"
-    },
-    {
-        "opcodeHex": "0x7f",
-        "mnemonic": "land",
-        "description": "Boolean AND long",
-        "opcodeBin": "01111111"
-    },
-    {
-        "opcodeHex": "0x81",
-        "mnemonic": "lor",
-        "description": "Boolean OR long",
-        "opcodeBin": "10000001"
-    },
-    {
-        "opcodeHex": "0x83",
-        "mnemonic": "lxor",
-        "description": "Boolean XOR long",
-        "opcodeBin": "10000011"
-    },
-    {
-        "opcodeHex": "0x84",
-        "mnemonic": "iinc",
-        "description": "Increment local variable by constant",
-        "opcodeBin": "10000100"
-    },
-    {
         "opcodeHex": "0x99",
-        "mnemonic": "ifeq",
-        "description": "Branch if int comparison with zero succeeds (== 0)",
+        "mnemonic": "br_licmpeq",
+        "description": "Branch if long1 == long2",
         "opcodeBin": "10011001"
     },
     {
         "opcodeHex": "0x9a",
-        "mnemonic": "ifne",
-        "description": "Branch if int comparison with zero does not succeed (!= 0)",
+        "mnemonic": "br_licmpne",
+        "description": "Branch if long1 != long2",
         "opcodeBin": "10011010"
     },
     {
         "opcodeHex": "0x9b",
-        "mnemonic": "iflt",
-        "description": "Branch if int comparison with zero is less than (< 0)",
+        "mnemonic": "br_licmplt",
+        "description": "Branch if long1 < long2",
         "opcodeBin": "10011011"
     },
     {
         "opcodeHex": "0x9c",
-        "mnemonic": "ifge",
-        "description": "Branch if int comparison with zero is greater than or equal to (>= 0)",
+        "mnemonic": "br_licmpge",
+        "description": "Branch if long1 >= long2)",
         "opcodeBin": "10011100"
     },
     {
         "opcodeHex": "0x9d",
-        "mnemonic": "ifgt",
-        "description": "Branch if int comparison with zero is greater than (> 0)",
+        "mnemonic": "br_licmpgt",
+        "description": "Branch if long1 > long2",
         "opcodeBin": "10011101"
     },
     {
         "opcodeHex": "0x9e",
-        "mnemonic": "ifle",
-        "description": "Branch if int comparison with zero is less than or equal to (<= 0)",
+        "mnemonic": "br_licmple",
+        "description": "Branch if long1 <= long2",
         "opcodeBin": "10011110"
     },
     {
-        "opcodeHex": "0x9f",
-        "mnemonic": "if_icmpeq",
-        "description": "Branch if int comparison equals (==)",
-        "opcodeBin": "10011111"
-    },
-    {
-        "opcodeHex": "0xa0",
-        "mnemonic": "if_icmpne",
-        "description": "Branch if int comparison does not equal (!=)",
-        "opcodeBin": "10100000"
-    },
-    {
-        "opcodeHex": "0xa1",
-        "mnemonic": "if_icmplt",
-        "description": "Branch if int comparison is less than (<)",
-        "opcodeBin": "10100001"
-    },
-    {
-        "opcodeHex": "0xa2",
-        "mnemonic": "if_icmpge",
-        "description": "Branch if int comparison is greater than or equal to (>=)",
-        "opcodeBin": "10100010"
-    },
-    {
-        "opcodeHex": "0xa3",
-        "mnemonic": "if_icmpgt",
-        "description": "Branch if int comparison is greater than (>)",
-        "opcodeBin": "10100011"
-    },
-    {
-        "opcodeHex": "0xa4",
-        "mnemonic": "if_icmple",
-        "description": "Branch if int comparison is less than or equal to (<=)",
-        "opcodeBin": "10100100"
-    },
-    {
         "opcodeHex": "0xa7",
-        "mnemonic": "goto",
+        "mnemonic": "br",
         "description": "Branch always",
         "opcodeBin": "10100111"
     },
@@ -172,11 +88,5 @@
         "mnemonic": "lreturn",
         "description": "Return long from method",
         "opcodeBin": "10101101"
-    },
-    {
-        "opcodeHex": "0xc8",
-        "mnemonic": "goto_w",
-        "description": "Branch always (wide index)",
-        "opcodeBin": "11001000"
     }
 ]

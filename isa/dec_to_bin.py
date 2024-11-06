@@ -13,4 +13,4 @@ with open('json/isa_bin.json', 'w') as file:
     json.dump(data, file, indent=4)
 
 
-print(data)
+# print(data)
