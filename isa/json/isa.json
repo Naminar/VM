@@ -1,92 +1,245 @@
 [
     {
-      "opcodeHex": "0x00",
-      "opcodeDec": 0,
-      "mnemonic": "nop",
-      "description": "Do nothing"
+        "opcodeHex": "0x00",
+        "opcodeDec": 0,
+        "mnemonic": "nop",
+        "description": "Do nothing"
     },
     {
-      "opcodeHex": "0x02",
-      "opcodeDec": 2,
-      "mnemonic": "lmov",
-      "description": "mov long from local variable to variable"
+        "opcodeHex": "0x02",
+        "opcodeDec": 2,
+        "mnemonic": "lmov",
+        "description": "mov long to reg (local variable)",
+        "args": [
+            {
+                "type": "long"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "_arg1 = _arg0;"
     },
     {
         "opcodeHex": "0x61",
         "opcodeDec": 97,
         "mnemonic": "ladd",
-        "description": "Add two longs"
+        "description": "Add two longs",
+        "args": [
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "_arg2 = _arg0 + _arg1;"
     },
     {
         "opcodeHex": "0x65",
         "opcodeDec": 101,
         "mnemonic": "lsub",
-        "description": "Subtract two longs"
+        "description": "Subtract two longs",
+        "args": [
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "_arg2 = _arg0 - _arg1;"
     },
     {
         "opcodeHex": "0x69",
         "opcodeDec": 105,
         "mnemonic": "lmul",
-        "description": "Multiply two longs"
+        "description": "Multiply two longs",
+        "args": [
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "_arg2 = _arg0 * _arg1;"
     },
     {
         "opcodeHex": "0x6d",
         "opcodeDec": 109,
         "mnemonic": "ldiv",
-        "description": "Integer division of two longs"
+        "description": "Integer division of two longs",
+        "args": [
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "_arg2 = _arg0 / _arg1;"
     },
     {
         "opcodeHex": "0x71",
         "opcodeDec": 113,
         "mnemonic": "lrem",
-        "description": "Remainder of two longs"
+        "description": "Remainder of two longs",
+        "args": [
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "_arg2 = _arg0 % _arg1;"
     },
     {
-      "opcodeHex": "0x99",
-      "opcodeDec": 153,
-      "mnemonic": "br_licmpeq",
-      "description": "Branch if long1 == long2"
+        "opcodeHex": "0x99",
+        "opcodeDec": 153,
+        "mnemonic": "br_licmpeq",
+        "description": "Branch if long1 == long2",
+        "args": [
+            {
+                "type": "long"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "if (_arg1 == _arg2) { _ip += _arg0; }"
     },
     {
-      "opcodeHex": "0x9a",
-      "opcodeDec": 154,
-      "mnemonic": "br_licmpne",
-      "description": "Branch if long1 != long2"
+        "opcodeHex": "0x9a",
+        "opcodeDec": 154,
+        "mnemonic": "br_licmpne",
+        "description": "Branch if long1 != long2",
+        "args": [
+            {
+                "type": "long"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "if (_arg1 != _arg2) { _ip += _arg0; }"
     },
     {
-      "opcodeHex": "0x9b",
-      "opcodeDec": 155,
-      "mnemonic": "br_licmplt",
-      "description": "Branch if long1 < long2"
+        "opcodeHex": "0x9b",
+        "opcodeDec": 155,
+        "mnemonic": "br_licmplt",
+        "description": "Branch if long1 < long2",
+        "args": [
+            {
+                "type": "long"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "if (_arg1 < _arg2) { _ip += _arg0; }"
     },
     {
-      "opcodeHex": "0x9c",
-      "opcodeDec": 156,
-      "mnemonic": "br_licmpge",
-      "description": "Branch if long1 >= long2)"
+        "opcodeHex": "0x9c",
+        "opcodeDec": 156,
+        "mnemonic": "br_licmpge",
+        "description": "Branch if long1 >= long2)",
+        "args": [
+            {
+                "type": "long"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "if (_arg1 >= _arg2) { _ip += _arg0; }"
     },
     {
-      "opcodeHex": "0x9d",
-      "opcodeDec": 157,
-      "mnemonic": "br_licmpgt",
-      "description": "Branch if long1 > long2"
+        "opcodeHex": "0x9d",
+        "opcodeDec": 157,
+        "mnemonic": "br_licmpgt",
+        "description": "Branch if long1 > long2",
+        "args": [
+            {
+                "type": "long"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "if (_arg1 > _arg2) { _ip += _arg0; }"
     },
     {
-      "opcodeHex": "0x9e",
-      "opcodeDec": 158,
-      "mnemonic": "br_licmple",
-      "description": "Branch if long1 <= long2"
+        "opcodeHex": "0x9e",
+        "opcodeDec": 158,
+        "mnemonic": "br_licmple",
+        "description": "Branch if long1 <= long2",
+        "args": [
+            {
+                "type": "long"
+            },
+            {
+                "type": "reg"
+            },
+            {
+                "type": "reg"
+            }
+        ],
+        "logic": "if (_arg1 <= _arg2) { _ip += _arg0; }"
     },
     {
-      "opcodeHex": "0xa7",
-      "opcodeDec": 167,
-      "mnemonic": "br",
-      "description": "Branch always"
+        "opcodeHex": "0xa7",
+        "opcodeDec": 167,
+        "mnemonic": "br",
+        "description": "Branch always",
+        "args": [
+            {
+                "type": "long"
+            }
+        ],
+        "logic": "_ip += _arg0;"
     },
     {
       "opcodeHex": "0xad",
       "opcodeDec": 173,
       "mnemonic": "lreturn",
-      "description": "Return long from method"
+      "description": "Return long from method",
+      "args": [
+            {
+                "type": "long"
+            }
+        ],
+        "logic": "_rv = _arg0;"
     }
 ]
