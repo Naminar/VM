@@ -1,0 +1,5 @@
+{% for instruction in instructions %}
+    void do_{{ instruction.mnemonic }}() {
+        {{ instruction.logic }}
+    }
+{% endfor %}

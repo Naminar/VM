@@ -3,7 +3,9 @@
         "opcodeHex": "0x00",
         "opcodeDec": 0,
         "mnemonic": "nop",
-        "description": "Do nothing"
+        "description": "Do nothing",
+        "args": [],
+        "logic": ""
     },
     {
         "opcodeHex": "0x02",
