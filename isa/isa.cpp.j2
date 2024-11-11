@@ -1,5 +1,57 @@
+#include <cstring>
+#include "isa.h"
+
+uint64_t REG_FILE[128];
+uint64_t IP = 0;
+uint64_t RET_VAL = 0;
+
+
 {% for instruction in instructions %}
-    void do_{{ instruction.mnemonic }}() {
-        {{ instruction.logic }}
-    }
+
+{{ instruction.mnemonic }}::{{ instruction.mnemonic }}(void *ptr) {
+    bytecode = calloc(bytecode_len, sizeof(uint8_t));
+    memcpy(bytecode, ptr, bytecode_len);
+    Decode();
+}
+
+{{ instruction.mnemonic }}::{{ instruction.mnemonic }}({{ instruction.constructor_args|join(', ') }}) {
+    bytecode = calloc(bytecode_len, sizeof(uint8_t));
+
+    {% for arg in instruction.args
+    %} _arg{{ loop.index0 }} = arg{{ loop.index0 }};
+    {% endfor %}
+
+    Dump(bytecode);
+}
+
+uint8_t {{ instruction.mnemonic }}::Decode() {
+    uint8_t *_ptr = reinterpret_cast<uint8_t *>(bytecode);
+    _ptr++;
+
+    {% for arg in instruction.args
+    %} _arg{{ loop.index0 }} = *reinterpret_cast<{{ arg["type"] }} *>(_ptr);
+    _ptr += {% if arg["type"] == 'RegType' %}1{% else %}8{% endif %};
+    {% endfor %}
+
+    return bytecode_len;
+}
+
+
+void {{ instruction.mnemonic }}::Run() const {
+    {{ instruction.logic }}
+}
+
+uint8_t {{ instruction.mnemonic }}::Dump(void *ptr) const {
+    uint8_t *_ptr = reinterpret_cast<uint8_t *>(ptr);
+
+    {% for arg in instruction.args
+    %}*reinterpret_cast<{{ arg["type"] }} *>(_ptr) = _arg{{ loop.index0 }};
+    _ptr += {% if arg["type"] == 'RegType' %}1{% else %}8{% endif %};
+    {% endfor %}
+
+    return bytecode_len;
+}
+
+
 {% endfor %}
+

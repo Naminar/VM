@@ -10,16 +10,28 @@ def read_isa_json_data(filepath: str) -> List:
 
 def prepare_cpp_code(data: List) -> None:
     for instr in data:
+        instr["len"] = 1
+        instr["decode"] = ""
+        instr["constructor"] = ""
+        instr["constructor_args"] = []
+        instr["args_cpp"] = []
         for i, arg in enumerate(instr["args"]):
-            if arg["type"] == "reg":
-                instr["logic"] = instr["logic"].replace(f"_arg{i}", 'GetReg()')
-            elif arg["type"] == "long":
-                instr["logic"] = instr["logic"].replace(f"_arg{i}", 'GetLong()')
+            if arg["type"] == "RegType":
+                instr["constructor_args"].append(f"RegType arg{i}")
+                instr["args_cpp"].append(f"RegType _arg{i}")
+                instr["decode"] = f"_arg{i} = reinterpret_cast<uint8_t *>(ptr);\nptr += 1;\n"
+                instr["len"] += 1
+                instr["logic"] = instr["logic"].replace(f"_arg{i}", f"REG_FILE[_arg{i}]")
+            elif arg["type"] == "LongType":
+                instr["constructor_args"].append(f"LongType arg{i}")
+                instr["args_cpp"].append(f"LongType _arg{i}")
+                instr["decode"] = f"_arg{i} = reinterpret_cast<uint64_t *>(ptr);\nptr += 8;\n"
+                instr["len"] += 8
             else:
                 raise RuntimeError("Unreachable")
 
-        instr["logic"] = instr["logic"].replace("_ip", 'GetIP()')
-        instr["logic"] = instr["logic"].replace("_rv", 'GetRetVal()')
+        instr["logic"] = instr["logic"].replace("_ip", 'IP')
+        instr["logic"] = instr["logic"].replace("_rv", 'RET_VAL')
 
 
 def gen_isa_cpp(data: List) -> None:
@@ -28,6 +40,10 @@ def gen_isa_cpp(data: List) -> None:
     template = env.get_template('isa.cpp.j2')
     output = template.render({"instructions": data})
     with open('isa.cpp', 'w') as f:
+        f.write(output)
+    template = env.get_template('isa.h.j2')
+    output = template.render({"instructions": data})
+    with open('isa.h', 'w') as f:
         f.write(output)
 
 

@@ -1,0 +1,29 @@
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+
+typedef uint8_t RegType;
+typedef uint64_t LongType;
+
+
+{% for instruction in instructions %}
+
+class {{ instruction.mnemonic }} {
+  public:
+    {{ instruction.mnemonic }}(void *ptr);
+    {{ instruction.mnemonic }}({{ instruction.constructor_args|join(', ') }});
+    uint8_t Decode();
+    void Run() const;
+    uint8_t Dump(void *ptr) const;
+
+  private:
+    {% for arg in instruction.args_cpp
+    %}{{ arg }} = 0;
+    {% endfor %}
+    uint8_t opcode = {{ instruction.opcodeDec }};
+    void *bytecode = nullptr;
+    uint8_t bytecode_len = {{ instruction.len }};
+};
+
+{% endfor %}
+

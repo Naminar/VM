@@ -14,10 +14,10 @@
         "description": "mov long to reg (local variable)",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "_arg1 = _arg0;"
@@ -29,13 +29,13 @@
         "description": "Add two longs",
         "args": [
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "_arg2 = _arg0 + _arg1;"
@@ -47,13 +47,13 @@
         "description": "Subtract two longs",
         "args": [
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "_arg2 = _arg0 - _arg1;"
@@ -65,13 +65,13 @@
         "description": "Multiply two longs",
         "args": [
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "_arg2 = _arg0 * _arg1;"
@@ -83,13 +83,13 @@
         "description": "Integer division of two longs",
         "args": [
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "_arg2 = _arg0 / _arg1;"
@@ -101,13 +101,13 @@
         "description": "Remainder of two longs",
         "args": [
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "_arg2 = _arg0 % _arg1;"
@@ -119,13 +119,13 @@
         "description": "Branch if long1 == long2",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "if (_arg1 == _arg2) { _ip += _arg0; }"
@@ -137,13 +137,13 @@
         "description": "Branch if long1 != long2",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "if (_arg1 != _arg2) { _ip += _arg0; }"
@@ -155,13 +155,13 @@
         "description": "Branch if long1 < long2",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "if (_arg1 < _arg2) { _ip += _arg0; }"
@@ -173,13 +173,13 @@
         "description": "Branch if long1 >= long2)",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "if (_arg1 >= _arg2) { _ip += _arg0; }"
@@ -191,13 +191,13 @@
         "description": "Branch if long1 > long2",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "if (_arg1 > _arg2) { _ip += _arg0; }"
@@ -209,13 +209,13 @@
         "description": "Branch if long1 <= long2",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             },
             {
-                "type": "reg"
+                "type": "RegType"
             }
         ],
         "logic": "if (_arg1 <= _arg2) { _ip += _arg0; }"
@@ -227,7 +227,7 @@
         "description": "Branch always",
         "args": [
             {
-                "type": "long"
+                "type": "LongType"
             }
         ],
         "logic": "_ip += _arg0;"
@@ -239,7 +239,7 @@
       "description": "Return long from method",
       "args": [
             {
-                "type": "long"
+                "type": "LongType"
             }
         ],
         "logic": "_rv = _arg0;"
