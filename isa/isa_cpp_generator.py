@@ -45,6 +45,10 @@ def gen_isa_cpp(data: List) -> None:
     output = template.render({"instructions": data})
     with open('isa.h', 'w') as f:
         f.write(output)
+    template = env.get_template('isa_run.cpp.j2')
+    output = template.render({"instructions": data})
+    with open('isa_run.cpp', 'w') as f:
+        f.write(output)
 
 
 if __name__ == "__main__":
