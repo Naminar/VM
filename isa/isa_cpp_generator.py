@@ -1,6 +1,8 @@
 from jinja2 import Environment, FileSystemLoader
 from typing import List
 import json
+import sys
+import os
 
 
 def read_isa_json_data(filepath: str) -> List:
@@ -39,14 +41,18 @@ def prepare_cpp_code(data: List) -> None:
 def gen_isa_inc(data: List, file: str) -> None:
     template = env.get_template(f"{file}.j2")
     output = template.render({"instructions": data})
-    with open(file, 'w') as f:
+    with open(os.path.join(sys.argv[2], file), 'w') as f:
         f.write(output)
 
 
 if __name__ == "__main__":
-    isa_data = read_isa_json_data("./json/isa.json")
+    if len(sys.argv) != 3:
+        print(f"Wrong arguments! Usage: {sys.argv[0]} <script_dir> <gen_dir>")
+        sys.exit(-1)
+
+    isa_data = read_isa_json_data(os.path.join(sys.argv[1], "json/isa.json"))
     prepare_cpp_code(isa_data)
-    file_loader = FileSystemLoader('.')
+    file_loader = FileSystemLoader(sys.argv[1])
     env = Environment(loader=file_loader)
 
     gen_isa_inc(isa_data, "isa_decl.inc")

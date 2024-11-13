@@ -15,6 +15,8 @@ set(TESTS_ROOT_DIR "${VM_ROOT_DIR}/tests")
 
 add_subdirectory(${ISA_ROOT_DIR})
 add_subdirectory(${RUNTIME_CORE_ROOT_DIR})
+add_subdirectory(${TESTS_ROOT_DIR})
+
 
 
 add_custom_target(clang-force-format
