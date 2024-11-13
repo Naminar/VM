@@ -1,0 +1,5 @@
+{% for instruction in instructions %}
+    uint8_t do_{{ instruction.mnemonic }}(uint8_t *ptr);
+    uint8_t create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}, uint8_t *ptr, uint64_t size);
+{% endfor -%}
+

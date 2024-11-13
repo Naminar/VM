@@ -24,7 +24,7 @@ class Interpretator {
     uint8_t *ip = nullptr;
     int64_t return_value = 0;
 
-    int64_t &Reg(const uint64_t n) {
+    int64_t &GetRegRef(const uint64_t n) {
         Frame &frame = frames.top();
         if (n > frame._n_regs - 1) {
             throw std::runtime_error("Out of bounds in registers.");

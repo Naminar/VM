@@ -78,7 +78,7 @@ uint8_t lmov::Decode() {
 
 
 void lmov::Run() const {
-    REG_FILE[_arg1] = _arg0;
+    _arg1 = _arg0;
 }
 
 uint8_t lmov::Dump(void *ptr) const {
@@ -130,7 +130,7 @@ uint8_t ladd::Decode() {
 
 
 void ladd::Run() const {
-    REG_FILE[_arg2] = REG_FILE[_arg0] + REG_FILE[_arg1];
+    _arg2 = _arg0 + _arg1;
 }
 
 uint8_t ladd::Dump(void *ptr) const {
@@ -184,7 +184,7 @@ uint8_t lsub::Decode() {
 
 
 void lsub::Run() const {
-    REG_FILE[_arg2] = REG_FILE[_arg0] - REG_FILE[_arg1];
+    _arg2 = _arg0 - _arg1;
 }
 
 uint8_t lsub::Dump(void *ptr) const {
@@ -238,7 +238,7 @@ uint8_t lmul::Decode() {
 
 
 void lmul::Run() const {
-    REG_FILE[_arg2] = REG_FILE[_arg0] * REG_FILE[_arg1];
+    _arg2 = _arg0 * _arg1;
 }
 
 uint8_t lmul::Dump(void *ptr) const {
@@ -292,7 +292,7 @@ uint8_t ldiv::Decode() {
 
 
 void ldiv::Run() const {
-    REG_FILE[_arg2] = REG_FILE[_arg0] / REG_FILE[_arg1];
+    _arg2 = _arg0 / _arg1;
 }
 
 uint8_t ldiv::Dump(void *ptr) const {
@@ -346,7 +346,7 @@ uint8_t lrem::Decode() {
 
 
 void lrem::Run() const {
-    REG_FILE[_arg2] = REG_FILE[_arg0] % REG_FILE[_arg1];
+    _arg2 = _arg0 % _arg1;
 }
 
 uint8_t lrem::Dump(void *ptr) const {
@@ -400,7 +400,7 @@ uint8_t br_licmpeq::Decode() {
 
 
 void br_licmpeq::Run() const {
-    if (REG_FILE[_arg1] == REG_FILE[_arg2]) { IP += _arg0; }
+    if (_arg1 == _arg2) { _ip += _arg0; }
 }
 
 uint8_t br_licmpeq::Dump(void *ptr) const {
@@ -454,7 +454,7 @@ uint8_t br_licmpne::Decode() {
 
 
 void br_licmpne::Run() const {
-    if (REG_FILE[_arg1] != REG_FILE[_arg2]) { IP += _arg0; }
+    if (_arg1 != _arg2) { _ip += _arg0; }
 }
 
 uint8_t br_licmpne::Dump(void *ptr) const {
@@ -508,7 +508,7 @@ uint8_t br_licmplt::Decode() {
 
 
 void br_licmplt::Run() const {
-    if (REG_FILE[_arg1] < REG_FILE[_arg2]) { IP += _arg0; }
+    if (_arg1 < _arg2) { _ip += _arg0; }
 }
 
 uint8_t br_licmplt::Dump(void *ptr) const {
@@ -562,7 +562,7 @@ uint8_t br_licmpge::Decode() {
 
 
 void br_licmpge::Run() const {
-    if (REG_FILE[_arg1] >= REG_FILE[_arg2]) { IP += _arg0; }
+    if (_arg1 >= _arg2) { _ip += _arg0; }
 }
 
 uint8_t br_licmpge::Dump(void *ptr) const {
@@ -616,7 +616,7 @@ uint8_t br_licmpgt::Decode() {
 
 
 void br_licmpgt::Run() const {
-    if (REG_FILE[_arg1] > REG_FILE[_arg2]) { IP += _arg0; }
+    if (_arg1 > _arg2) { _ip += _arg0; }
 }
 
 uint8_t br_licmpgt::Dump(void *ptr) const {
@@ -670,7 +670,7 @@ uint8_t br_licmple::Decode() {
 
 
 void br_licmple::Run() const {
-    if (REG_FILE[_arg1] <= REG_FILE[_arg2]) { IP += _arg0; }
+    if (_arg1 <= _arg2) { _ip += _arg0; }
 }
 
 uint8_t br_licmple::Dump(void *ptr) const {
@@ -718,7 +718,7 @@ uint8_t br::Decode() {
 
 
 void br::Run() const {
-    IP += _arg0;
+    _ip += _arg0;
 }
 
 uint8_t br::Dump(void *ptr) const {
@@ -762,7 +762,7 @@ uint8_t lreturn::Decode() {
 
 
 void lreturn::Run() const {
-    RET_VAL = _arg0;
+    return_value = _arg0;
 }
 
 uint8_t lreturn::Dump(void *ptr) const {
