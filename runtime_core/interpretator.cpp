@@ -31,12 +31,14 @@ Interpretator::Interpretator() {
 }
 
 
-uint64_t Interpretator::Run() {
+uint64_t Interpretator::Run(bool verbose) {
     if (_ptr == nullptr) {
         throw std::runtime_error("Can't Run bytecode, _ptr = nullptr.");
     }
 
-    _frames.top().DumpRegs();
+    if (verbose) {
+        _frames.top().DumpRegs();
+    }
 
     while (*_ptr != 255 /*exit opcode*/) {
         uint8_t opcode = *_ptr;
@@ -44,8 +46,10 @@ uint64_t Interpretator::Run() {
             throw std::runtime_error("Invalid opcode: " + std::to_string(opcode));
         }
 
-        // std::cout << "Running opcode: " << static_cast<uint32_t>(opcode) << std::endl;
-        // _frames.top().DumpRegs();
+        if (verbose) {
+            std::cout << "Running opcode: " << static_cast<uint32_t>(opcode) << std::endl;
+            _frames.top().DumpRegs();
+        }
         _ptr += DoInstr[*_ptr](_ptr);
     }
 

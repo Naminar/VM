@@ -27,7 +27,7 @@ class Interpretator {
   public:
 
     Interpretator();
-    uint64_t Run();
+    uint64_t Run(bool verbose = false);
     void Dump();
 
     std::stack<Frame> _frames;

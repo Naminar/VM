@@ -20,7 +20,9 @@ int main() {
     i.create_exit(0);
 
     i._ptr = i._bytecode;
+    std::cout << "------------------------" << std::endl;
     i.Dump();
+    std::cout << "------------------------" << std::endl;
     i._ptr = i._bytecode;
-    i.Run();
+    i.Run(true);
 }
