@@ -1,0 +1,5 @@
+{% for instruction in instructions %}
+    DoInstr[{{ instruction.opcodeDec }}] = [this](uint8_t* ptr) { return this->do_{{ instruction.mnemonic }}(ptr); };
+    DumpInstr[{{ instruction.opcodeDec }}] = [this](uint8_t* ptr) { return this->dump_{{ instruction.mnemonic }}(ptr); };
+{% endfor -%}
+

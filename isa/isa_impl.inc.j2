@@ -1,0 +1,67 @@
+{% for instruction in instructions %}
+
+uint8_t Interpretator::do_{{ instruction.mnemonic }}(uint8_t *ptr) {
+    ptr++;
+
+{% for arg in instruction.args %}
+{% if arg["type"] == 'RegType' %}
+    int64_t &_arg{{ loop.index0 }} = GetRegRef(*reinterpret_cast<uint8_t *>(ptr));
+    ptr += 1;
+{%- else %}
+    const int64_t _arg{{ loop.index0 }} = *reinterpret_cast<int64_t *>(ptr);
+    ptr +=  8;
+{%- endif -%}
+{% endfor %}
+
+    {{ instruction.logic }}
+    return {{ instruction.len }};
+}
+
+uint8_t Interpretator::dump_{{ instruction.mnemonic }}(uint8_t *ptr) {
+    std::cout << "{{ instruction.mnemonic }}";
+    ptr++;
+
+{% for arg in instruction.args %}
+{% if arg["type"] == 'RegType' %}
+    std::cout << ", r" << static_cast<int64_t>(*reinterpret_cast<uint8_t *>(ptr));
+    ptr += 1;
+{%- else %}
+    std::cout << ", " << static_cast<int64_t>(*reinterpret_cast<int64_t *>(ptr));
+    ptr +=  8;
+{%- endif -%}
+{% endfor %}
+
+    std::cout << std::endl;
+    return {{ instruction.len }};
+}
+
+uint8_t Interpretator::create_{{ instruction.mnemonic }}({{ (instruction.create_args + ["uint8_t *ptr, uint64_t size"])|join(', ') }}) {
+    if (size < {{ instruction.len }}) {
+        throw std::runtime_error("Out of range in create_{{ instruction.mnemonic }}");
+    }
+
+    *reinterpret_cast<uint8_t*>(ptr) = {{ instruction.opcodeDec }};
+    ptr++;
+{% for arg in instruction.args %}
+{% if arg["type"] == 'RegType' %}
+    *reinterpret_cast<uint8_t *>(ptr) = arg{{ loop.index0 }};
+    ptr += 1;
+{%- else %}
+    *reinterpret_cast<int64_t *>(ptr) = arg{{ loop.index0 }};
+    ptr +=  8;
+{%- endif -%}
+{% endfor %}
+
+    return {{ instruction.len }};
+}
+
+uint8_t Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}) {
+    uint64_t size = _bytecode_len - static_cast<uint64_t>(_ptr - _bytecode);
+    uint8_t offset = create_{{ instruction.mnemonic }}({{ (instruction.create_args_names + ["_ptr, size"])|join(', ') }});
+    _ptr += offset;
+    return offset;
+}
+
+
+{% endfor %}
+
