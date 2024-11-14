@@ -12,6 +12,8 @@ class Frame {
         _regs.resize(n_regs);
     }
 
+    void DumpRegs();
+
     std::vector<int64_t> _regs;
     uint64_t _n_regs;
 };
@@ -25,16 +27,20 @@ class Interpretator {
   public:
 
     Interpretator();
+    uint64_t Run();
+    void Dump();
 
     std::stack<Frame> _frames;
     uint8_t *_bytecode = nullptr;
+    uint64_t _bytecode_len = 0;
+    uint8_t *_ptr = nullptr;
     uint8_t *_ip = nullptr;
-    int64_t _return_value = 0;
+    int64_t _return_value = 0; // from Call
+    int64_t _return_code = 0;  // from whole program
 
     int64_t &GetRegRef(const uint64_t n);
     std::vector<std::function<uint8_t(uint8_t*)>> DoInstr;
     std::vector<std::function<uint8_t(uint8_t*)>> DumpInstr;
-    // uint8_t DoInstr(uint8_t *ptr);
-    // uint8_t DumpInstr(uint8_t *ptr);
+
     #include "isa_decl.inc"
 };

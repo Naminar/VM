@@ -35,7 +35,7 @@ uint8_t Interpretator::dump_{{ instruction.mnemonic }}(uint8_t *ptr) {
     return {{ instruction.len }};
 }
 
-uint8_t Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}) {
+uint8_t Interpretator::create_{{ instruction.mnemonic }}({{ (instruction.create_args + ["uint8_t *ptr, uint64_t size"])|join(', ') }}) {
     if (size < {{ instruction.len }}) {
         throw std::runtime_error("Out of range in create_{{ instruction.mnemonic }}");
     }
@@ -54,6 +54,14 @@ uint8_t Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_a
 
     return {{ instruction.len }};
 }
+
+uint8_t Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}) {
+    uint64_t size = _bytecode_len - static_cast<uint64_t>(_ptr - _bytecode);
+    uint8_t offset = create_{{ instruction.mnemonic }}({{ (instruction.create_args_names + ["_ptr, size"])|join(', ') }});
+    _ptr += offset;
+    return offset;
+}
+
 
 {% endfor %}
 

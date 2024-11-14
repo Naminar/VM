@@ -92,7 +92,7 @@
                 "type": "RegType"
             }
         ],
-        "logic": "_arg2 = _arg0 / _arg1;"
+        "logic": "if (_arg1 == 0) { throw std::runtime_error(\"Devision by zero!\"); } _arg2 = _arg0 / _arg1;"
     },
     {
         "opcodeHex": "0x71",
@@ -243,5 +243,17 @@
             }
         ],
         "logic": "_rv = _arg0;"
+    },
+    {
+        "opcodeHex": "0xff",
+        "opcodeDec": 255,
+        "mnemonic": "exit",
+        "description": "Exit with long exit code",
+        "args": [
+            {
+                "type": "LongType"
+            }
+        ],
+        "logic": "_return_code = _arg0;"
     }
 ]

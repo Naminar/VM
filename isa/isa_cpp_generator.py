@@ -17,16 +17,19 @@ def prepare_cpp_code(data: List) -> None:
         instr["constructor"] = ""
         instr["constructor_args"] = []
         instr["create_args"] = []
+        instr["create_args_names"] = []
         instr["args_cpp"] = []
         for i, arg in enumerate(instr["args"]):
             if arg["type"] == "RegType":
                 instr["constructor_args"].append(f"RegType arg{i}")
                 instr["create_args"].append(f"uint8_t arg{i}")
+                instr["create_args_names"].append(f"arg{i}")
                 instr["args_cpp"].append(f"RegType _arg{i}")
                 instr["decode"] = f"_arg{i} = reinterpret_cast<uint8_t *>(ptr);\nptr += 1;\n"
                 instr["len"] += 1
             elif arg["type"] == "LongType":
                 instr["create_args"].append(f"int64_t arg{i}")
+                instr["create_args_names"].append(f"arg{i}")
                 instr["constructor_args"].append(f"LongType arg{i}")
                 instr["args_cpp"].append(f"LongType _arg{i}")
                 instr["decode"] = f"_arg{i} = reinterpret_cast<uint64_t *>(ptr);\nptr += 8;\n"
@@ -35,7 +38,7 @@ def prepare_cpp_code(data: List) -> None:
                 raise RuntimeError("Unreachable")
 
         instr["logic"] = instr["logic"].replace("_rv", '_return_value')
-        instr["create_args"] += ["uint8_t *ptr, uint64_t size"]
+        # instr["create_args"] += ["uint8_t *ptr, uint64_t size"]
 
 
 def gen_isa_inc(data: List, file: str) -> None:
