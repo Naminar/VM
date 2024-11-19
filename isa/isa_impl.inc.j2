@@ -75,15 +75,36 @@ uint8_t Interpretator::do_call(uint8_t *ptr) {
     const int64_t n_args = *reinterpret_cast<int64_t *>(ptr);
     ptr +=  8;
 
-    std::vector<uint64_t> args;
+    std::vector<int64_t> args;
 
     for (uint64_t i = 0; i < n_args; ++i) {
         args.push_back(*reinterpret_cast<int64_t *>(ptr));
         ptr +=  8;
     }
-
-    // logic
-    return 1 + 16 + n_args * 8;
+    // new frame and push
+    Frame* new_frame = new Frame(n_args);
+    
+    // set args to regs
+    new_frame->_regs=args;
+    this->_frames.push(new_frame);
+    
+    // save _ptr after call
+    // std::cout << this->current_frame << std::endl;
+    // std::cout << "_ptr" << this->current_frame->_ptr <<std::endl;
+    this->current_frame->_ptr = this->_ptr;
+    this->current_frame->_ptr += 1 + 16 + n_args * 8;
+    // std::cout << "_ptr" << this->current_frame->_ptr << std::endl;
+    // switch to the new frame
+    this->current_frame = new_frame;
+    
+    // set ptr to function
+    std::cout << "func_id:" << func_id << std::endl;
+    Function* called_function = this->GetFuncById(func_id);
+    std::cout << "called function:" << called_function->_name << std::endl;
+    this->_ptr = called_function->_bytecode;
+    // Must be zero 0! 
+    //If it will be != 0 - will change the the _ptr in the new frame!!!
+    return 0;
 }
 
 uint8_t Interpretator::dump_call(uint8_t *ptr) {

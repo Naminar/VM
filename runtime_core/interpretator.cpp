@@ -40,17 +40,23 @@ uint64_t Interpretator::Run(bool verbose) {
         _frames.top()->DumpRegs();
     }
 
-    while (*_ptr != 255 /*exit opcode*/) {
-        uint8_t opcode = *_ptr;
-        if (opcode > 255 || DoInstr[opcode] == nullptr) {
-            throw std::runtime_error("Invalid opcode: " + std::to_string(opcode));
-        }
+    try {
+        while (*_ptr != 255 /*exit opcode*/) {
+            uint8_t opcode = *_ptr;
+            if (opcode > 255 || DoInstr[opcode] == nullptr) {
+                throw std::runtime_error("Invalid opcode: " + std::to_string(opcode));
+            }
 
-        if (verbose) {
-            std::cout << "Running opcode: " << static_cast<uint32_t>(opcode) << std::endl;
-            _frames.top()->DumpRegs();
+            if (verbose) {
+                std::cout << "Running opcode: " << static_cast<uint32_t>(opcode) << std::endl;
+                _frames.top()->DumpRegs();
+            }
+            _ptr += DoInstr[*_ptr](_ptr);
         }
-        _ptr += DoInstr[*_ptr](_ptr);
+    }
+    catch (std::runtime_error &e) {
+        std::cout << *_ptr <<e.what() << std::endl;
+        return 0;
     }
 
     _ptr += DoInstr[*_ptr](_ptr);
