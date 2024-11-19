@@ -1,11 +1,10 @@
-
+#pragma once
 #include <string>
 #include <stack>
 #include <vector>
 #include <iostream>
 #include <functional>
 #include <cstdint>
-
 
 class Frame {
   public:
