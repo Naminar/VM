@@ -5,3 +5,8 @@
     uint8_t create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }});
 {% endfor -%}
 
+
+    uint8_t do_call(uint8_t *ptr);
+    uint8_t dump_call(uint8_t *ptr);
+    uint8_t create_call(uint64_t func_id, uint64_t n_args, std::vector<uint64_t> args, uint8_t *ptr, uint64_t size);
+    uint8_t create_call(uint64_t func_id, uint64_t n_args, std::vector<uint64_t> args);

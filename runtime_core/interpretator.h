@@ -32,11 +32,12 @@ class Function {
     uint64_t _n_args = 0;
     uint8_t *_bytecode = nullptr;
     uint64_t _bytecode_len = 0;
-}
+};
 
 
-typedef uint8_t (*DoFuncPtrType)(uint8_t*);
-typedef uint8_t (*DumpFuncPtrType)(uint8_t*);
+typedef uint8_t (DoFuncPtrType)(uint8_t*);
+// typedef uint8_t (*DoFuncPtrType)(uint8_t*);
+typedef uint8_t (DumpFuncPtrType)(uint8_t*);
 
 
 class Interpretator {

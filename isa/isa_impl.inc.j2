@@ -65,3 +65,73 @@ uint8_t Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_a
 
 {% endfor %}
 
+
+
+uint8_t Interpretator::do_call(uint8_t *ptr) {
+    ptr++;
+
+    const int64_t func_id = *reinterpret_cast<int64_t *>(ptr);
+    ptr +=  8;
+    const int64_t n_args = *reinterpret_cast<int64_t *>(ptr);
+    ptr +=  8;
+
+    std::vector<uint64_t> args;
+
+    for (uint64_t i = 0; i < n_args; ++i) {
+        args.push_back(*reinterpret_cast<int64_t *>(ptr));
+        ptr +=  8;
+    }
+
+    // logic
+    return 1 + 16 + n_args * 8;
+}
+
+uint8_t Interpretator::dump_call(uint8_t *ptr) {
+    std::cout << "call";
+    ptr++;
+
+    std::cout << " #f" << static_cast<int64_t>(*reinterpret_cast<int64_t *>(ptr));
+    ptr +=  8;
+
+    const int64_t n_args = *reinterpret_cast<int64_t *>(ptr);
+    std::cout << ", " << static_cast<int64_t>(n_args);
+    ptr +=  8;
+
+
+    for (uint64_t i = 0; i < n_args; ++i) {
+        std::cout << ", " << static_cast<int64_t>(*reinterpret_cast<int64_t *>(ptr));
+        ptr +=  8;
+    }
+
+    std::cout << std::endl;
+
+    return 1 + 16 + n_args * 8;
+}
+
+uint8_t Interpretator::create_call(uint64_t func_id, uint64_t n_args, std::vector<uint64_t> args, uint8_t *ptr, uint64_t size) {
+    if (size < 1 + 16 + n_args * 8) {
+        throw std::runtime_error("Out of range in create_call");
+    }
+
+
+    *reinterpret_cast<uint8_t*>(ptr) = 254;
+    ptr++;
+    *reinterpret_cast<uint8_t*>(ptr) = func_id;
+    ptr +=  8;
+    *reinterpret_cast<uint8_t*>(ptr) = n_args;
+    ptr +=  8;
+
+    for (auto arg : args) {
+        *reinterpret_cast<uint8_t*>(ptr) = n_args;
+        ptr +=  8;
+    }
+
+    return 1 + 16 + n_args * 8;
+}
+
+uint8_t Interpretator::create_call(uint64_t func_id, uint64_t n_args, std::vector<uint64_t> args) {
+    uint64_t size = _bytecode_len - static_cast<uint64_t>(_ptr - _bytecode);
+    uint8_t offset = create_call(func_id, n_args, args, _ptr, size);
+    _ptr += offset;
+    return offset;
+}

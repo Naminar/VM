@@ -3,3 +3,5 @@
     DumpInstr[{{ instruction.opcodeDec }}] = [this](uint8_t* ptr) { return this->dump_{{ instruction.mnemonic }}(ptr); };
 {% endfor -%}
 
+    DoInstr[254] = [this](uint8_t* ptr) { return this->do_call(ptr); };
+    DumpInstr[254] = [this](uint8_t* ptr) { return this->dump_call(ptr); };
