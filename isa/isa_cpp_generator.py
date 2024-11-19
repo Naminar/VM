@@ -38,6 +38,7 @@ def prepare_cpp_code(data: List) -> None:
                 raise RuntimeError("Unreachable")
 
         instr["logic"] = instr["logic"].replace("_rv", '_return_value')
+        instr["logic"] = instr["logic"].replace("_ip", '_ptr')
         # instr["create_args"] += ["uint8_t *ptr, uint64_t size"]
 
 

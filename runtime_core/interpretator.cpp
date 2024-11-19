@@ -10,11 +10,11 @@ void Frame::DumpRegs() {
 
 
 int64_t &Interpretator::GetRegRef(const uint64_t n) {
-    Frame &frame = _frames.top();
-    if (n > frame._n_regs - 1) {
+    Frame *frame = _frames.top();
+    if (n > frame->_n_regs - 1) {
         throw std::runtime_error("Out of bounds in registers.");
     }
-    return frame._regs[n];
+    return frame->_regs[n];
 }
 
 #include "isa_impl.inc"
@@ -37,7 +37,7 @@ uint64_t Interpretator::Run(bool verbose) {
     }
 
     if (verbose) {
-        _frames.top().DumpRegs();
+        _frames.top()->DumpRegs();
     }
 
     while (*_ptr != 255 /*exit opcode*/) {
@@ -48,7 +48,7 @@ uint64_t Interpretator::Run(bool verbose) {
 
         if (verbose) {
             std::cout << "Running opcode: " << static_cast<uint32_t>(opcode) << std::endl;
-            _frames.top().DumpRegs();
+            _frames.top()->DumpRegs();
         }
         _ptr += DoInstr[*_ptr](_ptr);
     }
