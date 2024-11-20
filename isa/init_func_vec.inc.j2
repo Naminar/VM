@@ -1,7 +1,7 @@
 {% for instruction in instructions %}
-    DoInstr[{{ instruction.opcodeDec }}] = [this](uint8_t* ptr) { return this->do_{{ instruction.mnemonic }}(ptr); };
-    DumpInstr[{{ instruction.opcodeDec }}] = [this](uint8_t* ptr) { return this->dump_{{ instruction.mnemonic }}(ptr); };
-{% endfor -%}
+    DoInstr[{{ instruction.opcodeDec }}] = [this]() { this->do_{{ instruction.mnemonic }}(); };
+    DumpInstr[{{ instruction.opcodeDec }}] = [this]() { this->dump_{{ instruction.mnemonic }}(); };
+{% endfor %}
 
-    DoInstr[254] = [this](uint8_t* ptr) { return this->do_call(ptr); };
-    DumpInstr[254] = [this](uint8_t* ptr) { return this->dump_call(ptr); };
+    DoInstr[254] = [this]() { this->do_call(); };
+    DumpInstr[254] = [this]() { this->dump_call(); };

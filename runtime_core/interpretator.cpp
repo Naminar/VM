@@ -1,8 +1,8 @@
 #include "interpretator.h"
-
+#include "isa_opcode_defines.h"
 
 void Frame::DumpRegs() {
-    std::cout << "Frame dump:" << std::endl;
+    std::cout << "Frame dump (" << _regs.size() << "):\n";
     for (uint8_t i = 0; i < _regs.size(); ++i) {
         std::cout << "REG[" << i << "]: " << _regs[i] << std::endl;
     }
@@ -10,19 +10,18 @@ void Frame::DumpRegs() {
 
 
 int64_t &Interpretator::GetRegRef(const uint64_t n) {
-    Frame *frame = _frames.top();
-    if (n > frame->_n_regs - 1) {
+    if (_current_frame->_n_regs == 0 || n > _current_frame->_n_regs - 1) {
         throw std::runtime_error("Out of bounds in registers.");
     }
-    return frame->_regs[n];
+    return _current_frame->_regs[n];
 }
 
 #include "isa_impl.inc"
 
 
 Interpretator::Interpretator() {
-    DoInstr.resize(256);
-    DumpInstr.resize(256);
+    DoInstr.resize(OPCODE_EXIT + 1);
+    DumpInstr.resize(OPCODE_EXIT + 1);
 
     for (auto &i : DoInstr) { i = 0; }
     for (auto &i : DumpInstr) { i = 0; }
@@ -37,21 +36,21 @@ uint64_t Interpretator::Run(bool verbose) {
     }
 
     if (verbose) {
-        _frames.top()->DumpRegs();
+        _current_frame->DumpRegs();
     }
 
     try {
-        while (*_ptr != 255 /*exit opcode*/) {
+        while (*_ptr != OPCODE_EXIT) {
             uint8_t opcode = *_ptr;
-            if (opcode > 255 || DoInstr[opcode] == nullptr) {
+            if (opcode > OPCODE_EXIT || DoInstr[opcode] == nullptr) {
                 throw std::runtime_error("Invalid opcode: " + std::to_string(opcode));
             }
 
             if (verbose) {
                 std::cout << "Running opcode: " << static_cast<uint32_t>(opcode) << std::endl;
-                _frames.top()->DumpRegs();
+                _current_frame->DumpRegs();
             }
-            _ptr += DoInstr[*_ptr](_ptr);
+            DoInstr[*_ptr]();
         }
     }
     catch (std::runtime_error &e) {
@@ -59,7 +58,7 @@ uint64_t Interpretator::Run(bool verbose) {
         return 0;
     }
 
-    _ptr += DoInstr[*_ptr](_ptr);
+    DoInstr[*_ptr]();
 
     return _return_code;
 }
@@ -70,14 +69,14 @@ void Interpretator::Dump() {
         throw std::runtime_error("Can't Dump bytecode, _ptr = nullptr.");
     }
 
-    while (*_ptr != 255 /*exit opcode*/) {
+    while (*_ptr != OPCODE_EXIT) {
         uint8_t opcode = *_ptr;
-        if (opcode > 255 || DumpInstr[opcode] == nullptr) {
+        if (opcode > OPCODE_EXIT || DumpInstr[opcode] == nullptr) {
             throw std::runtime_error("Invalid opcode: " + std::to_string(opcode));
         }
 
-        _ptr += DumpInstr[*_ptr](_ptr);
+        DumpInstr[*_ptr]();
     }
 
-    _ptr += DumpInstr[*_ptr](_ptr);
+    DumpInstr[*_ptr]();
 }

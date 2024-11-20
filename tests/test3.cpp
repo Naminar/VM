@@ -1,32 +1,41 @@
 #include "interpretator.h"
 
 int main() {
-    Interpretator i;
-    uint64_t func_id = i.CreateFunction("main", 0 /* n_args */);
-    Frame* start_frame = new Frame(3);
-    i._frames.push(start_frame);
-    i.current_frame = start_frame;
+    Interpretator interpretator;
 
-    Function *f = i.GetFuncById(func_id);
-    f->_bytecode = (uint8_t *) calloc(10000, 1);
-    f->_bytecode_len = 10000;
-
-    i.SetPtr(f->_bytecode, f->_bytecode_len, f->_bytecode);
-    i.create_lmov(1, 1);
-    i.create_ladd(1, 1, 1);
-    i.create_ladd(1, 1, 1);
-    i.create_ladd(1, 1, 1);
-    i.create_ladd(1, 1, 2);
-    i.create_ldiv(1, 1, 1);
-    i.create_ldiv(1, 1, 1);
+    uint8_t *start_bytecode = reinterpret_cast<uint8_t *>(calloc(1000, 1));
+    interpretator.SetPtr(start_bytecode, 1000, start_bytecode);
     std::vector<uint64_t> v;
-    i.create_call(0, 0, v);
-    i.create_exit(0);
+    interpretator.create_call(0, 0, v);
+    interpretator.create_exit(0);
 
-    i.SetPtr(f->_bytecode, f->_bytecode_len, f->_bytecode);
+    uint64_t func_id = interpretator.CreateFunction("main", 0 /* n_args */);
+    Frame* start_frame = new Frame(3);
+    interpretator._frames.push(start_frame);
+    interpretator._current_frame = start_frame;
+
+    Function *function = interpretator.GetFuncById(func_id);
+    function->_bytecode = (uint8_t *) calloc(10000, 1);
+    function->_bytecode_len = 10000;
+
+    interpretator.SetPtr(function->_bytecode, function->_bytecode_len, function->_bytecode);
+    interpretator.create_lmov(1, 1);
+    interpretator.create_ladd(1, 1, 1);
+    interpretator.create_ladd(1, 1, 1);
+    interpretator.create_ladd(1, 1, 1);
+    interpretator.create_ladd(1, 1, 2);
+    interpretator.create_ldiv(1, 1, 1);
+    interpretator.create_ldiv(1, 1, 1);
+    interpretator.create_exit(0);
+
     std::cout << "------------------------" << std::endl;
-    i.Dump();
+    interpretator.SetPtr(function->_bytecode, function->_bytecode_len, function->_bytecode);
+    interpretator.Dump();
     std::cout << "------------------------" << std::endl;
-    i.SetPtr(f->_bytecode, f->_bytecode_len, f->_bytecode);
-    i.Run(true);
+    interpretator.SetPtr(start_bytecode, 1000, start_bytecode);
+    interpretator.Dump();
+    std::cout << "------------------------" << std::endl;
+
+    interpretator.SetPtr(start_bytecode, 1000, start_bytecode);
+    interpretator.Run(true);
 }

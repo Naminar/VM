@@ -25,18 +25,14 @@ class Frame {
 
 class Function {
   public:
-    Function(const std::string &name, uint64_t n_args): _name(name), _n_args(n_args) {}
+    Function(const std::string &name, uint64_t n_args): _name(name), _n_args(n_args), _n_regs(5) {} // need to fix _n_regs
 
     std::string _name = "";
     uint64_t _n_args = 0;
+    uint64_t _n_regs = 0;
     uint8_t *_bytecode = nullptr;
     uint64_t _bytecode_len = 0;
 };
-
-
-typedef uint8_t (DoFuncPtrType)(uint8_t*);
-// typedef uint8_t (*DoFuncPtrType)(uint8_t*);
-typedef uint8_t (DumpFuncPtrType)(uint8_t*);
 
 
 class Interpretator {
@@ -47,7 +43,7 @@ class Interpretator {
     void Dump();
 
     std::stack<Frame *> _frames;
-    Frame *current_frame;
+    Frame *_current_frame;
     std::vector<Function *> _functions;
     uint8_t *_bytecode = nullptr;
     uint64_t _bytecode_len = 0;
@@ -79,8 +75,8 @@ class Interpretator {
     }
 
     int64_t &GetRegRef(const uint64_t n);
-    std::vector<std::function<uint8_t(uint8_t*)>> DoInstr;
-    std::vector<std::function<uint8_t(uint8_t*)>> DumpInstr;
+    std::vector<std::function<void()>> DoInstr;
+    std::vector<std::function<void()>> DumpInstr;
 
     #include "isa_decl.inc"
 };

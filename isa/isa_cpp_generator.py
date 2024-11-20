@@ -13,33 +13,20 @@ def read_isa_json_data(filepath: str) -> List:
 def prepare_cpp_code(data: List) -> None:
     for instr in data:
         instr["len"] = 1
-        instr["decode"] = ""
-        instr["constructor"] = ""
-        instr["constructor_args"] = []
         instr["create_args"] = []
-        instr["create_args_names"] = []
-        instr["args_cpp"] = []
         for i, arg in enumerate(instr["args"]):
             if arg["type"] == "RegType":
-                instr["constructor_args"].append(f"RegType arg{i}")
                 instr["create_args"].append(f"uint8_t arg{i}")
-                instr["create_args_names"].append(f"arg{i}")
-                instr["args_cpp"].append(f"RegType _arg{i}")
-                instr["decode"] = f"_arg{i} = reinterpret_cast<uint8_t *>(ptr);\nptr += 1;\n"
                 instr["len"] += 1
             elif arg["type"] == "LongType":
                 instr["create_args"].append(f"int64_t arg{i}")
-                instr["create_args_names"].append(f"arg{i}")
-                instr["constructor_args"].append(f"LongType arg{i}")
-                instr["args_cpp"].append(f"LongType _arg{i}")
-                instr["decode"] = f"_arg{i} = reinterpret_cast<uint64_t *>(ptr);\nptr += 8;\n"
                 instr["len"] += 8
             else:
                 raise RuntimeError("Unreachable")
 
         instr["logic"] = instr["logic"].replace("_rv", '_return_value')
         instr["logic"] = instr["logic"].replace("_ip", '_ptr')
-        # instr["create_args"] += ["uint8_t *ptr, uint64_t size"]
+        instr["define_name"] = ("OPCODE_" + instr["mnemonic"]).upper()
 
 
 def gen_isa_inc(data: List, file: str) -> None:
@@ -50,8 +37,8 @@ def gen_isa_inc(data: List, file: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print(f"Wrong arguments! Usage: {sys.argv[0]} <script_dir> <gen_dir>")
+    if len(sys.argv) < 3:
+        print(f"Wrong arguments! Usage: {sys.argv[0]} <script_dir> <gen_dir> <template_1> [, <template_2> [, ...]]")
         sys.exit(-1)
 
     isa_data = read_isa_json_data(os.path.join(sys.argv[1], "json/isa.json"))
@@ -59,6 +46,6 @@ if __name__ == "__main__":
     file_loader = FileSystemLoader(sys.argv[1])
     env = Environment(loader=file_loader)
 
-    gen_isa_inc(isa_data, "isa_decl.inc")
-    gen_isa_inc(isa_data, "isa_impl.inc")
-    gen_isa_inc(isa_data, "init_func_vec.inc")
+
+    for template in sys.argv[3:]:
+        gen_isa_inc(isa_data, os.path.splitext(os.path.basename(template))[0])

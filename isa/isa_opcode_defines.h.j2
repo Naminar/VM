@@ -1,0 +1,4 @@
+{% for instruction in instructions -%}
+#define {{ instruction.define_name }} {{ instruction.opcodeDec }}
+{% endfor %}
+#define OPCODE_CALL 254
