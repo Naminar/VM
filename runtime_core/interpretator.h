@@ -25,7 +25,7 @@ class Frame {
 
 class Function {
   public:
-    Function(const std::string &name, uint64_t n_args): _name(name), _n_args(n_args), _n_regs(5) {} // need to fix _n_regs
+    Function(const std::string &name, uint64_t n_args): _name(name), _n_args(n_args), _n_regs(200) {} // need to fix _n_regs
 
     std::string _name = "";
     uint64_t _n_args = 0;

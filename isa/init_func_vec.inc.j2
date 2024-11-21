@@ -5,3 +5,6 @@
 
     DoInstr[254] = [this]() { this->do_call(); };
     DumpInstr[254] = [this]() { this->dump_call(); };
+    DoInstr[253] = [this]() { this->do_lreturn(); };
+    DumpInstr[253] = [this]() { this->dump_lreturn(); };
+

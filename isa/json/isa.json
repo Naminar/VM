@@ -23,6 +23,33 @@
         "logic": "_arg1 = _arg0;"
     },
     {
+        "opcodeHex": "0x03",
+        "opcodeDec": 3,
+        "mnemonic": "rmov",
+        "description": "mov reg to reg",
+        "args": [
+            {
+                "type": "RegType"
+            },
+            {
+                "type": "RegType"
+            }
+        ],
+        "logic": "_arg1 = _arg0;"
+    },
+    {
+        "opcodeHex": "0x04",
+        "opcodeDec": 4,
+        "mnemonic": "lmov_return",
+        "description": "mov return to register",
+        "args": [
+            {
+                "type": "RegType"
+            }
+        ],
+        "logic": "_arg0 = _rv;"
+    },
+    {
         "opcodeHex": "0x61",
         "opcodeDec": 97,
         "mnemonic": "ladd",
@@ -231,18 +258,6 @@
             }
         ],
         "logic": "_ip += _arg0;"
-    },
-    {
-      "opcodeHex": "0xad",
-      "opcodeDec": 173,
-      "mnemonic": "lreturn",
-      "description": "Return long from method",
-      "args": [
-            {
-                "type": "LongType"
-            }
-        ],
-        "logic": "_rv = _arg0;"
     },
     {
         "opcodeHex": "0xff",
