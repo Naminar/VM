@@ -277,10 +277,10 @@
     {
         "opcodeDec": 255,
         "mnemonic": "exit",
-        "description": "Exit with long exit code",
+        "description": "Exit with exit code from register",
         "args": [
             {
-                "type": "LongType"
+                "type": "RegType"
             }
         ],
         "logic": "_return_code = _arg0;"
