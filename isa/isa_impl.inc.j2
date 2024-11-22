@@ -1,15 +1,31 @@
+#define CHECK_REMAINED_SIZE(actual_len, label) \
+    if (_ptr < _bytecode || _bytecode_len - static_cast<int64_t>(_ptr - _bytecode) < actual_len) {\
+        throw std::runtime_error("Out of range. Label: " + std::string(#label));\
+    }
+
 {% for instruction in instructions %}
 
 void Interpretator::do_{{ instruction.mnemonic }}() {
+    CHECK_REMAINED_SIZE({{ instruction.len_without_vector }}, do_{{ instruction.mnemonic }});
     _ptr++;
 
 {% for arg in instruction.args %}
 {% if arg["type"] == 'RegType' %}
-    int64_t &_arg{{ loop.index0 }} = GetRegRef(*reinterpret_cast<uint8_t *>(_ptr));
-    _ptr += 1;
+    int64_t &_arg{{ loop.index0 }} = GetRegRef(*_ptr++);  // register
+{%- elif arg["type"] == 'LongType' %}
+    const int64_t &_arg{{ loop.index0 }} = *_ptr++;       // long
+{%- elif arg["type"] == 'FuncIdType' %}
+    int64_t &_arg{{ loop.index0 }} = *_ptr++;             // func_id
+{%- elif arg["type"] == 'VectorLenType' %}
+    int64_t &_arg{{ loop.index0 }} = *_ptr++;             // vector_len
+{%- elif arg["type"] == 'VectorType' %}
+    CHECK_REMAINED_SIZE(_arg{{ loop.index0 - 1}}, do_{{ instruction.mnemonic }});
+    std::vector<int64_t> _arg{{ loop.index0 }};
+    for (int i = 0; i < _arg{{ loop.index0 - 1}}; ++i) {
+        _arg{{ loop.index0 }}.push_back(*_ptr++);
+    }
 {%- else %}
-    const int64_t _arg{{ loop.index0 }} = *reinterpret_cast<int64_t *>(_ptr);
-    _ptr +=  8;
+    throw std::runtime_error("Unreachable type in do");
 {%- endif -%}
 {% endfor %}
 
@@ -17,17 +33,27 @@ void Interpretator::do_{{ instruction.mnemonic }}() {
 }
 
 void Interpretator::dump_{{ instruction.mnemonic }}() {
-    uint64_t offset = static_cast<uint64_t>(_ptr - _bytecode);
-    std::cout << offset << ": {{ instruction.mnemonic }}";
+    CHECK_REMAINED_SIZE({{ instruction.len_without_vector }}, dump_{{ instruction.mnemonic }});
+    std::cout << static_cast<int64_t>(_ptr - _bytecode) << ": {{ instruction.mnemonic }}";
     _ptr++;
 
 {% for arg in instruction.args %}
 {% if arg["type"] == 'RegType' %}
-    std::cout << ", r" << static_cast<int64_t>(*reinterpret_cast<uint8_t *>(_ptr));
-    _ptr += 1;
+    std::cout << ", r" << *_ptr++;
+{%- elif arg["type"] == 'LongType' %}
+    std::cout << ", " << *_ptr++;
+{%- elif arg["type"] == 'FuncIdType' %}
+    std::cout << ", #" << *_ptr++;
+{%- elif arg["type"] == 'VectorLenType' %}
+    auto _arg{{ loop.index0 }} = *_ptr;
+    std::cout << ", " << *_ptr++;
+{%- elif arg["type"] == 'VectorType' %}
+    CHECK_REMAINED_SIZE(_arg{{ loop.index0 - 1}}, dump_{{ instruction.mnemonic }});
+    for (int i = 0; i < _arg{{ loop.index0 - 1}}; ++i) {
+        std::cout << ", " << *_ptr++;
+    }
 {%- else %}
-    std::cout << ", " << static_cast<int64_t>(*reinterpret_cast<int64_t *>(_ptr));
-    _ptr +=  8;
+    throw std::runtime_error("Unreachable type in dump");
 {%- endif -%}
 {% endfor %}
 
@@ -35,21 +61,18 @@ void Interpretator::dump_{{ instruction.mnemonic }}() {
 }
 
 void Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}) {
-    uint64_t size_remained = _bytecode_len - static_cast<uint64_t>(_ptr - _bytecode);
+    CHECK_REMAINED_SIZE({{ instruction.len_without_vector }}, create_{{ instruction.mnemonic }});
 
-    if (size_remained < {{ instruction.len }}) {
-        throw std::runtime_error("Out of range to create_{{ instruction.mnemonic }}");
-    }
-
-    *reinterpret_cast<uint8_t*>(_ptr) = {{ instruction.opcodeDec }};
+    *_ptr = {{ instruction.opcodeDec }};
     _ptr++;
 {% for arg in instruction.args %}
-{% if arg["type"] == 'RegType' %}
-    *reinterpret_cast<uint8_t *>(_ptr) = arg{{ loop.index0 }};
-    _ptr += 1;
+{% if arg["type"] != 'VectorType' %}
+    *_ptr++ = arg{{ loop.index0 }};
 {%- else %}
-    *reinterpret_cast<int64_t *>(_ptr) = arg{{ loop.index0 }};
-    _ptr +=  8;
+    CHECK_REMAINED_SIZE(arg{{ loop.index0 - 1 }}, create_{{ instruction.mnemonic }});
+    for (auto arg : arg{{ loop.index0 }}) {
+        *_ptr++ = arg;
+    }
 {%- endif -%}
 {% endfor %}
 }
@@ -59,114 +82,101 @@ void Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_args
 
 
 
-void Interpretator::do_call() {
-    _ptr++;
+// void Interpretator::do_call() {
+//     _ptr++;
 
-    const int64_t func_id = *reinterpret_cast<int64_t *>(_ptr);
-    _ptr +=  8;
-    const int64_t n_args = *reinterpret_cast<int64_t *>(_ptr);
-    _ptr +=  8;
+//     const int64_t func_id = *reinterpret_cast<int64_t *>(_ptr);
+//     _ptr +=  8;
+//     const int64_t n_args = *reinterpret_cast<int64_t *>(_ptr);
+//     _ptr +=  8;
 
-    std::vector<uint8_t> args;
+//     std::vector<int64_t> args;
 
-    for (uint64_t i = 0; i < n_args; ++i) {
-        args.push_back(*reinterpret_cast<uint8_t *>(_ptr));
-        _ptr++;
-    }
+//     for (int64_t i = 0; i < n_args; ++i) {
+//         args.push_back(*reinterpret_cast<int64_t *>(_ptr));
+//         _ptr++;
+//     }
 
-    _current_frame->_ptr = _ptr;
+//     CreateNewFrame(func_id, args);
+// }
 
-    // new frame and push
-    Frame* new_frame = new Frame(GetFuncById(func_id)->_n_regs);
-    for (uint64_t i = 0; i < args.size(); ++i) {
-        new_frame->_regs[i] = GetRegRef(args[i]);
-    }
+// void Interpretator::dump_call() {
+//     int64_t offset = static_cast<int64_t>(_ptr - _bytecode);
+//     std::cout << offset << ": call";
+//     _ptr++;
 
-    _current_frame = new_frame;
-    _frames.push(new_frame);
-    _ptr = GetFuncById(func_id)->_bytecode;
-}
+//     const int64_t func_id = *reinterpret_cast<int64_t *>(_ptr);
+//     _ptr +=  8;
 
-void Interpretator::dump_call() {
-    uint64_t offset = static_cast<uint64_t>(_ptr - _bytecode);
-    std::cout << offset << ": call";
-    _ptr++;
+//     std::cout << " #f" << func_id << " (" << GetFuncById(func_id)->_name << ")";
 
-    const int64_t func_id = *reinterpret_cast<int64_t *>(_ptr);
-    _ptr +=  8;
-
-    std::cout << " #f" << func_id << " (" << GetFuncById(func_id)->_name << ")";
-
-    const int64_t n_args = *reinterpret_cast<int64_t *>(_ptr);
-    std::cout << ", " << static_cast<int64_t>(n_args);
-    _ptr +=  8;
+//     const int64_t n_args = *reinterpret_cast<int64_t *>(_ptr);
+//     std::cout << ", " << static_cast<int64_t>(n_args);
+//     _ptr +=  8;
 
 
-    for (uint64_t i = 0; i < n_args; ++i) {
-        std::cout << ", r" << static_cast<int64_t>(*reinterpret_cast<uint8_t *>(_ptr));
-        _ptr++;
-    }
+//     for (int64_t i = 0; i < n_args; ++i) {
+//         std::cout << ", r" << static_cast<int64_t>(*reinterpret_cast<int64_t *>(_ptr));
+//         _ptr++;
+//     }
 
-    std::cout << std::endl;
-}
+//     std::cout << std::endl;
+// }
 
-void Interpretator::create_call(uint64_t func_id, uint64_t n_args, std::vector<uint8_t> args) {
-    uint64_t size_remained = _bytecode_len - static_cast<uint64_t>(_ptr - _bytecode);
+// void Interpretator::create_call(int64_t func_id, int64_t n_args, std::vector<int64_t> args) {
+//     int64_t size_remained = _bytecode_len - static_cast<int64_t>(_ptr - _bytecode);
 
-    if (size_remained < 17 + n_args) {
-        throw std::runtime_error("Out of range to create_call");
-    }
-
-
-    *reinterpret_cast<uint8_t*>(_ptr) = OPCODE_CALL;
-    _ptr++;
-    *reinterpret_cast<uint8_t*>(_ptr) = func_id;
-    _ptr +=  8;
-    *reinterpret_cast<uint8_t*>(_ptr) = n_args;
-    _ptr +=  8;
-
-    for (auto arg : args) {
-        *reinterpret_cast<uint8_t *>(_ptr) = arg;
-        _ptr++;
-    }
-}
+//     if (size_remained < 17 + n_args) {
+//         throw std::runtime_error("Out of range to create_call");
+//     }
 
 
-void Interpretator::do_lreturn() {
-    _ptr++;
+//     *reinterpret_cast<int64_t*>(_ptr) = OPCODE_CALL;
+//     _ptr++;
+//     *reinterpret_cast<int64_t*>(_ptr) = func_id;
+//     _ptr +=  8;
+//     *reinterpret_cast<int64_t*>(_ptr) = n_args;
+//     _ptr +=  8;
 
-    _return_value = GetRegRef(*reinterpret_cast<uint8_t *>(_ptr));
-    _ptr++;
-
-    delete _current_frame;
-    _frames.pop();
-    _current_frame = _frames.top();
-    _ptr = _current_frame->_ptr;
-}
-
-
-void Interpretator::dump_lreturn() {
-    uint64_t offset = static_cast<uint64_t>(_ptr - _bytecode);
-    std::cout << offset << ": ";
-    _ptr++;
-
-    uint8_t reg = *reinterpret_cast<uint8_t *>(_ptr);
-    _ptr++;
-
-    std::cout << "lreturn r" << static_cast<int64_t>(reg) << std::endl;
-}
+//     for (auto arg : args) {
+//         *reinterpret_cast<int64_t *>(_ptr) = arg;
+//         _ptr++;
+//     }
+// }
 
 
-void Interpretator::create_lreturn(uint8_t reg) {
-    uint64_t size_remained = _bytecode_len - static_cast<uint64_t>(_ptr - _bytecode);
+// void Interpretator::do_lreturn() {
+//     _ptr++;
 
-    if (size_remained < 7) {
-        throw std::runtime_error("Out of range to create_call");
-    }
+//     _return_value = GetRegRef(*reinterpret_cast<int64_t *>(_ptr));
+//     _ptr++;
+
+//     ReturnPreviousFrame();
+// }
 
 
-    *reinterpret_cast<uint8_t*>(_ptr) = OPCODE_LRETURN;
-    _ptr++;
-    *reinterpret_cast<uint8_t *>(_ptr) = reg;
-    _ptr++;
-}
+// void Interpretator::dump_lreturn() {
+//     int64_t offset = static_cast<int64_t>(_ptr - _bytecode);
+//     std::cout << offset << ": ";
+//     _ptr++;
+
+//     int64_t reg = *reinterpret_cast<int64_t *>(_ptr);
+//     _ptr++;
+
+//     std::cout << "lreturn r" << static_cast<int64_t>(reg) << std::endl;
+// }
+
+
+// void Interpretator::create_lreturn(int64_t reg) {
+//     int64_t size_remained = _bytecode_len - static_cast<int64_t>(_ptr - _bytecode);
+
+//     if (size_remained < 7) {
+//         throw std::runtime_error("Out of range to create_call");
+//     }
+
+
+//     *reinterpret_cast<int64_t*>(_ptr) = OPCODE_LRETURN;
+//     _ptr++;
+//     *reinterpret_cast<int64_t *>(_ptr) = reg;
+//     _ptr++;
+// }

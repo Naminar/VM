@@ -3,9 +3,9 @@
 int main() {
     Interpretator interpretator;
 
-    uint8_t *start_bytecode = reinterpret_cast<uint8_t *>(calloc(1000, 1));
+    int64_t *start_bytecode = reinterpret_cast<int64_t *>(calloc(1000, 1));
     interpretator.SetPtr(start_bytecode, 1000, start_bytecode);
-    std::vector<uint8_t> v;
+    std::vector<int64_t> v;
     v.push_back(0);
     v.push_back(1);
 
@@ -28,7 +28,7 @@ int main() {
     // counter += constant + counter
     interpretator.create_ladd(5, 3, 3);
     // continue if counter < maxcounter
-    interpretator.create_br_licmple(-25, 3, 4);
+    interpretator.create_br_licmple(-18, 3, 4);
     // exit(0)
     interpretator.create_exit(0);
 

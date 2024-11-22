@@ -2,9 +2,3 @@
     DoInstr[{{ instruction.opcodeDec }}] = [this]() { this->do_{{ instruction.mnemonic }}(); };
     DumpInstr[{{ instruction.opcodeDec }}] = [this]() { this->dump_{{ instruction.mnemonic }}(); };
 {% endfor %}
-
-    DoInstr[254] = [this]() { this->do_call(); };
-    DumpInstr[254] = [this]() { this->dump_call(); };
-    DoInstr[253] = [this]() { this->do_lreturn(); };
-    DumpInstr[253] = [this]() { this->dump_lreturn(); };
-

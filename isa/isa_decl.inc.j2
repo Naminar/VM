@@ -3,11 +3,3 @@
     void dump_{{ instruction.mnemonic }}();
     void create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }});
 {% endfor -%}
-
-    void do_call();
-    void dump_call();
-    void create_call(uint64_t func_id, uint64_t n_args, std::vector<uint8_t> args);
-
-    void do_lreturn();
-    void dump_lreturn();
-    void create_lreturn(uint8_t reg);

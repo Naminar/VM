@@ -6,14 +6,14 @@ set(ISA_TEMPLATES
     ${CMAKE_CURRENT_SOURCE_DIR}/init_func_vec.inc.j2
     ${CMAKE_CURRENT_SOURCE_DIR}/isa_decl.inc.j2
     ${CMAKE_CURRENT_SOURCE_DIR}/isa_impl.inc.j2
-    ${CMAKE_CURRENT_SOURCE_DIR}/isa_opcode_defines.h.j2
+    ${CMAKE_CURRENT_SOURCE_DIR}/defines.h.j2
 )
 
 set(GENERATED_INC
     ${CMAKE_BINARY_DIR}/generated/init_func_vec.inc
     ${CMAKE_BINARY_DIR}/generated/isa_decl.inc
     ${CMAKE_BINARY_DIR}/generated/isa_impl.inc
-    ${CMAKE_BINARY_DIR}/generated/isa_opcode_defines.h
+    ${CMAKE_BINARY_DIR}/generated/defines.h
 )
 
 add_custom_command(
