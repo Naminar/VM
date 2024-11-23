@@ -12,8 +12,7 @@ int main() {
   // r0 = 10
   interpretator.create_lmov(10, 0);
   // call fibonacci(r0)
-  std::vector<int64_t> v;
-  v.push_back(0);
+  int64_t v[] = {0};
   interpretator.create_call(0, 1, v);
   // r0 = _return_value
   interpretator.create_lmov_return(0);
@@ -38,16 +37,14 @@ int main() {
   // r3 = r0 - r1
   interpretator.create_lsub(0, 1, 3);
   // call fibonacci(r3)
-  std::vector<int64_t> v1;
-  v1.push_back(3);
+  int64_t v1[] = {3};
   interpretator.create_call(0, 1, v1);
   // r3 = return value
   interpretator.create_lmov_return(3);
   // r4 = r0 - r2
   interpretator.create_lsub(0, 2, 4);
   // call fibonacci(r3)
-  std::vector<int64_t> v2;
-  v2.push_back(4);
+  int64_t v2[] = {4};
   interpretator.create_call(0, 1, v2);
   // r4 = return value
   interpretator.create_lmov_return(4);
@@ -64,6 +61,6 @@ int main() {
   std::cout << "------------------------" << std::endl;
 
   interpretator.SetPtr(start_bytecode, 1000, start_bytecode);
-  int64_t rc = interpretator.Run(true);
+  int64_t rc = interpretator.Run(false);
   std::cout << "---\nResult: " << rc << std::endl;
 }

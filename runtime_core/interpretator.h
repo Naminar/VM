@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstring>
 #include <stack>
 #include <vector>
 #include <iostream>
@@ -75,19 +76,19 @@ class Interpretator {
         return _functions.size() - 1;
     }
 
-    inline void CreateNewFrame(int64_t func_id, std::vector<int64_t> &arg_regs) {
+    inline void CreateFrame(int64_t func_id, int64_t n_args, const int64_t *args) {
         _current_frame->SetPtr(_bytecode, _bytecode_len, _ptr);
 
         Function *function = GetFuncById(func_id);
         Frame* new_frame = new Frame(function->_n_regs);
 
-        if (function->_n_args != arg_regs.size()) {
+        if (function->_n_args != n_args) {
             throw std::runtime_error("ERROR! Bad call: worng n_regs.");
         }
 
-        for (int64_t i = 0; i < function->_n_args; ++i) {
-            new_frame->_regs[i] = GetRegRef(arg_regs[i]);
-        }
+        for (int i = 0; i < n_args; ++i) {
+            new_frame->_regs[i] = GetRegRef(args[i]);
+        } 
 
         _current_frame = new_frame;
         _frames.push(new_frame);

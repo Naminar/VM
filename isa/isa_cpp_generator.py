@@ -13,14 +13,14 @@ def read_json_data(filepath: str) -> List:
 def prepare_cpp_code(data: List) -> None:
     for instr in data:
         instr["create_args"] = []
-        instr["len_without_vector"] = 1
+        instr["len_without_array"] = 1
         for i, arg in enumerate(instr["args"]):
-            instr["len_without_vector"] += 8
+            instr["len_without_array"] += 8
             
-            if arg["type"] != "VectorType":
+            if arg["type"] != "ArrayType":
                 instr["create_args"].append(f"uint64_t arg{i} /* {arg['type']} */")
             else:
-                instr["create_args"].append(f"const std::vector<int64_t> &arg{i} /* args_vector */")
+                instr["create_args"].append(f"const int64_t *arg{i} /* args_array */")
 
         instr["logic"] = instr["logic"].replace("_rv", '_return_value')
         instr["logic"] = instr["logic"].replace("_ip", '_ptr')

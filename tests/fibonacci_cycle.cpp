@@ -5,9 +5,6 @@ int main() {
 
   int64_t *start_bytecode = reinterpret_cast<int64_t *>(calloc(1000, 1));
   interpretator.SetPtr(start_bytecode, 1000, start_bytecode);
-  std::vector<int64_t> v;
-  v.push_back(0);
-  v.push_back(1);
 
   // r0 = 1
   interpretator.create_lmov(1, 0);

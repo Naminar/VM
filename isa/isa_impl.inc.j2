@@ -6,7 +6,7 @@
 {% for instruction in instructions %}
 
 void Interpretator::do_{{ instruction.mnemonic }}() {
-    CHECK_REMAINED_SIZE({{ instruction.len_without_vector }}, do_{{ instruction.mnemonic }});
+    CHECK_REMAINED_SIZE({{ instruction.len_without_array }}, do_{{ instruction.mnemonic }});
     _ptr++;
 
 {% for arg in instruction.args %}
@@ -16,14 +16,12 @@ void Interpretator::do_{{ instruction.mnemonic }}() {
     const int64_t &_arg{{ loop.index0 }} = *_ptr++;       // long
 {%- elif arg["type"] == 'FuncIdType' %}
     const int64_t &_arg{{ loop.index0 }} = *_ptr++;       // func_id
-{%- elif arg["type"] == 'VectorLenType' %}
-    const int64_t &_arg{{ loop.index0 }} = *_ptr++;       // vector_len
-{%- elif arg["type"] == 'VectorType' %}
+{%- elif arg["type"] == 'ArrayLenType' %}
+    const int64_t &_arg{{ loop.index0 }} = *_ptr++;       // array_len
+{%- elif arg["type"] == 'ArrayType' %}
     CHECK_REMAINED_SIZE(_arg{{ loop.index0 - 1}}, do_{{ instruction.mnemonic }});
-    std::vector<int64_t> _arg{{ loop.index0 }};
-    for (int i = 0; i < _arg{{ loop.index0 - 1}}; ++i) {
-        _arg{{ loop.index0 }}.push_back(*_ptr++);
-    }
+    const int64_t *_arg{{ loop.index0 }} = _ptr;
+    _ptr += _arg{{ loop.index0 - 1}};
 {%- else %}
     throw std::runtime_error("Unreachable type in do");
 {%- endif -%}
@@ -33,7 +31,7 @@ void Interpretator::do_{{ instruction.mnemonic }}() {
 }
 
 void Interpretator::dump_{{ instruction.mnemonic }}() {
-    CHECK_REMAINED_SIZE({{ instruction.len_without_vector }}, dump_{{ instruction.mnemonic }});
+    CHECK_REMAINED_SIZE({{ instruction.len_without_array }}, dump_{{ instruction.mnemonic }});
     std::cout << static_cast<int64_t>(_ptr - _bytecode) << ": {{ instruction.mnemonic }}";
     _ptr++;
 
@@ -44,13 +42,15 @@ void Interpretator::dump_{{ instruction.mnemonic }}() {
     std::cout << ", " << *_ptr++;           // long
 {%- elif arg["type"] == 'FuncIdType' %}
     std::cout << ", #" << *_ptr++;          // func_id
-{%- elif arg["type"] == 'VectorLenType' %}
+{%- elif arg["type"] == 'ArrayLenType' %}
     auto _arg{{ loop.index0 }} = *_ptr;
-    std::cout << ", " << *_ptr++;           // vector_len
-{%- elif arg["type"] == 'VectorType' %}
+    std::cout << ", " << *_ptr++;           // array_len
+{%- elif arg["type"] == 'ArrayType' %}
     CHECK_REMAINED_SIZE(_arg{{ loop.index0 - 1}}, dump_{{ instruction.mnemonic }});
     for (int i = 0; i < _arg{{ loop.index0 - 1}}; ++i) {
-        std::cout << ", " << *_ptr++;
+        // std::cout << ", " << *_ptr++;
+        std::cout << ", " << *_ptr;
+        _ptr++;
     }
 {%- else %}
     throw std::runtime_error("Unreachable type in dump");
@@ -61,18 +61,17 @@ void Interpretator::dump_{{ instruction.mnemonic }}() {
 }
 
 void Interpretator::create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}) {
-    CHECK_REMAINED_SIZE({{ instruction.len_without_vector }}, create_{{ instruction.mnemonic }});
+    CHECK_REMAINED_SIZE({{ instruction.len_without_array }}, create_{{ instruction.mnemonic }});
 
     *_ptr = {{ instruction.opcodeDec }};
     _ptr++;
 {% for arg in instruction.args %}
-{% if arg["type"] != 'VectorType' %}
+{% if arg["type"] != 'ArrayType' %}
     *_ptr++ = arg{{ loop.index0 }};
 {%- else %}
     CHECK_REMAINED_SIZE(arg{{ loop.index0 - 1 }}, create_{{ instruction.mnemonic }});
-    for (auto arg : arg{{ loop.index0 }}) {
-        *_ptr++ = arg;
-    }
+    memcpy(_ptr, arg{{ loop.index0 }}, arg{{ loop.index0 - 1 }} * sizeof(int64_t));
+    _ptr += arg{{ loop.index0 - 1 }};
 {%- endif -%}
 {% endfor %}
 }

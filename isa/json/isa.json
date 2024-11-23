@@ -264,15 +264,15 @@
                 "description": "Function id"
             },
             {
-                "type": "VectorLenType",
+                "type": "ArrayLenType",
                 "description": "Number of args"
             },
             {
-                "type": "VectorType",
-                "description": "Args vector"
+                "type": "ArrayType",
+                "description": "Args array"
             }
         ],
-        "logic": "CreateNewFrame(_arg0, _arg2);"
+        "logic": "CreateFrame(_arg0, _arg1, _arg2);"
     },
     {
         "opcodeDec": 255,
