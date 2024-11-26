@@ -1,5 +1,0 @@
-{% for instruction in instructions %}
-    void do_{{ instruction.mnemonic }}();
-    void dump_{{ instruction.mnemonic }}();
-    void create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }});
-{% endfor -%}

@@ -1,0 +1,26 @@
+#pragma once
+#include <cstdint>
+#include "isa.h"
+
+class Builder {
+  public:
+    Builder(){}
+    int64_t *_ptr = nullptr;
+    int64_t *_bytecode = nullptr;
+    int64_t _bytecode_len = 0;
+
+    void SetPtr(int64_t *bytecode, int64_t bytecode_len, int64_t *ptr) {
+        _bytecode = bytecode;
+        _bytecode_len = bytecode_len;
+        _ptr = ptr;
+    }
+
+    {% for instruction in instructions -%}
+    void create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}) {
+        if (sizeof(ISA::instr_{{ instruction.mnemonic }}) > _bytecode + _bytecode_len - _ptr) {
+            throw std::runtime_error("Can't create_{{ instruction.mnemonic }}, out of memory");
+        }
+        _ptr += ISA::create_{{ instruction.mnemonic }}({{ (["_ptr"] + instruction.create_arg_names)|join(', ') }});
+    }
+    {% endfor %}
+};

@@ -1,0 +1,56 @@
+#pragma once
+#include <cstdint>
+
+class Interpretator;
+
+// Defines
+// ---------------------------------------------------------------------------------------------------------------------
+{% for instruction in instructions -%}
+#define {{ instruction.opcode_define_name }} {{ instruction.opcodeDec }}
+{% endfor -%}
+// ---------------------------------------------------------------------------------------------------------------------
+
+
+namespace ISA {
+
+
+// Structs
+// ---------------------------------------------------------------------------------------------------------------------
+{% for instruction in instructions -%}
+struct instr_{{ instruction.mnemonic }} {
+    int64_t opcode;
+{%- for arg in instruction.args -%}
+{% if arg["type"] == 'RegType' %}
+    int64_t _arg{{ loop.index0 }};  // register
+{%- elif arg["type"] == 'LongType' %}
+    int64_t _arg{{ loop.index0 }};  // long
+{%- elif arg["type"] == 'FuncIdType' %}
+    int64_t _arg{{ loop.index0 }};  // func_id
+{%- elif arg["type"] == 'RegArgsLenType' %}
+    int64_t _arg{{ loop.index0 }};  // array_len
+{%- else %}
+    UNREACHABLE;
+{%- endif -%}
+{%- endfor %}
+};
+{% endfor -%}
+// ---------------------------------------------------------------------------------------------------------------------
+
+
+// Executor api declaration
+// ---------------------------------------------------------------------------------------------------------------------
+{% for instruction in instructions -%}
+void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr);
+void dump_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr, bool dump_all = true);
+int64_t create_{{ instruction.mnemonic }}({{ (["int64_t *ptr"] + instruction.create_args)|join(', ') }});
+{% endfor -%}
+// ---------------------------------------------------------------------------------------------------------------------
+
+
+// Dispatch table
+// ---------------------------------------------------------------------------------------------------------------------
+extern void (*const dispatch_do[256])(Interpretator *, int64_t *);
+extern void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool);
+// ---------------------------------------------------------------------------------------------------------------------
+
+} // namespace ISA
