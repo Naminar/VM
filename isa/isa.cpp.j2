@@ -12,6 +12,10 @@ void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool) = { {{ dispat
 // ---------------------------------------------------------------------------------------------------------------------
 void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
     {
+        if (i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr < sizeof(instr_{{ instruction.mnemonic }})) {
+            throw std::runtime_error("Out of memory in do_{{ instruction.mnemonic }}");
+        }
+
         if (*ptr != {{ instruction.opcodeDec }}) {
             throw std::runtime_error("Wrong opcode!!!");
         }
@@ -30,6 +34,10 @@ void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
 
 void dump_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr, bool dump_all) {
     {
+        if (i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr < sizeof(instr_{{ instruction.mnemonic }})) {
+            throw std::runtime_error("Out of memory in dump_{{ instruction.mnemonic }}");
+        }
+
         if (*ptr != {{ instruction.opcodeDec }}) {
             throw std::runtime_error("Wrong opcode!!!");
         }
