@@ -1,0 +1,91 @@
+#include "isa.h"
+#include "interpretator.h"
+
+namespace ISA {
+
+void (*const dispatch_do[256])(Interpretator *, int64_t *) = { {{ dispatch_table.do|join(', ') }} };
+void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool) = { {{ dispatch_table.dump|join(', ') }} };
+
+
+{% for instruction in instructions -%}
+// Instruction: '{{ instruction.mnemonic }}'
+// ---------------------------------------------------------------------------------------------------------------------
+void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
+    {
+        if ((i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr) * sizeof(int64_t)
+                                                                            < sizeof(instr_{{ instruction.mnemonic }})) {
+            throw std::runtime_error("Out of memory in do_{{ instruction.mnemonic }}");
+        }
+
+        if (*ptr != {{ instruction.opcodeDec }}) {
+            throw std::runtime_error("Wrong opcode!!!");
+        }
+
+        instr_{{ instruction.mnemonic }} *instr_struct = reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr);
+
+        dump_{{ instruction.mnemonic }}(i, ptr, false);
+        ptr = reinterpret_cast<int64_t *>(reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr) + 1);
+        {{ instruction.logic }}
+        // i->_current_frame->DumpRegs();
+    }
+{%- if instruction.mnemonic != 'exit' %}
+    return dispatch_do[*ptr](i, ptr);
+{%- endif %}
+}
+
+void dump_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr, bool dump_all) {
+    {
+        if ((i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr) * sizeof(int64_t)
+                                                                            < sizeof(instr_{{ instruction.mnemonic }})) {
+            throw std::runtime_error("Out of memory in dump_{{ instruction.mnemonic }}");
+        }
+
+        if (*ptr != {{ instruction.opcodeDec }}) {
+            throw std::runtime_error("Wrong opcode!!!");
+        }
+
+        instr_{{ instruction.mnemonic }} *instr_struct = reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr);
+        std::cout << (ptr - i->_current_frame->_bytecode) << ": {{ instruction.mnemonic }}";
+
+{%- for arg in instruction.args %}
+    {%- if arg["type"] == 'RegType' %}
+        std::cout << ", r" << instr_struct->_arg{{ loop.index0 }};          // register
+    {%- elif arg["type"] == 'LongType' %}
+        std::cout << ", " << instr_struct->_arg{{ loop.index0 }};           // long
+    {%- elif arg["type"] == 'FuncIdType' %}
+        std::cout << ", #" << instr_struct->_arg{{ loop.index0 }};          // func_id
+    {%- elif arg["type"] == 'RegArgsLenType' %}
+        auto _arg{{ loop.index0 }} = instr_struct->_arg{{ loop.index0 }};
+        std::cout << ", " << _arg{{ loop.index0 }};           // array_len
+    {%- else %}
+        throw std::runtime_error("Unreachable type in dump.");
+    {%- endif -%}
+
+{%- endfor %}
+        std::cout << std::endl;
+
+        if (!dump_all) {
+            return;
+        }
+    }
+
+    {%- if instruction.mnemonic != 'exit' %}
+    return dispatch_dump[*reinterpret_cast<int64_t *>(reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr) + 1)](i,
+        reinterpret_cast<int64_t *>(reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr) + 1), true);
+    {%- endif %}
+}
+
+int64_t create_{{ instruction.mnemonic }}({{ (["int64_t *ptr"] + instruction.create_args)|join(', ') }}) {
+    instr_{{ instruction.mnemonic }} *instr_struct = reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr);
+    instr_struct->opcode = {{ instruction.opcodeDec }};
+
+{%- for arg in instruction.args %}
+    instr_struct->_arg{{ loop.index0 }} = arg{{ loop.index0 }};
+{%- endfor %}
+
+    return {{ instruction.len_in_int64 }};
+}
+// ---------------------------------------------------------------------------------------------------------------------
+{% endfor -%}
+
+} // namespace ISA

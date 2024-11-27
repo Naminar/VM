@@ -11,25 +11,38 @@ def read_json_data(filepath: str) -> List:
 
 
 def prepare_cpp_code(data: List) -> None:
-    for instr in data:
+    dispatch_table = {}
+    dispatch_table["do"] = ["nullptr" for i in range(256)]
+    dispatch_table["dump"] = ["nullptr" for i in range(256)]
+    for instr in data["instructions"]:
         instr["create_args"] = []
-        instr["len_without_array"] = 1
+        instr["create_arg_names"] = []
+        instr["len_in_int64"] = 1
         for i, arg in enumerate(instr["args"]):
-            instr["len_without_array"] += 8
-            
-            if arg["type"] != "ArrayType":
-                instr["create_args"].append(f"uint64_t arg{i} /* {arg['type']} */")
-            else:
-                instr["create_args"].append(f"const int64_t *arg{i} /* args_array */")
+            instr["len_in_int64"] += 1
+            instr["create_args"].append(f"uint64_t arg{i} /* {arg['type']} */")
+            instr["create_arg_names"].append(f"arg{i} /* {arg['type']} */")
 
-        instr["logic"] = instr["logic"].replace("_rv", '_return_value')
-        instr["logic"] = instr["logic"].replace("_ip", '_ptr')
+            if arg["type"] == "RegType":
+                instr["logic"] = instr["logic"].replace(f"_arg{i}", f"i->GetRegRef(_arg{i})")
+
+        instr["logic"] = instr["logic"].replace("_arg", 'instr_struct->_arg')
+        instr["logic"] = instr["logic"].replace("_rv", 'i->_current_frame->_return_value')
+        instr["logic"] = instr["logic"].replace("_ptr", 'i->_current_frame->_ptr')
+        instr["logic"] = instr["logic"].replace("_rc", 'i->_return_code')
+        instr["logic"] = instr["logic"].replace("CreateFrame", 'i->CreateFrame')
+        instr["logic"] = instr["logic"].replace("ReturnPreviousFrame", 'i->ReturnPreviousFrame')
+        instr["logic"] = instr["logic"].replace("_ip", 'ptr')
         instr["opcode_define_name"] = ("OPCODE_" + instr["mnemonic"]).upper()
+
+        dispatch_table["do"][instr["opcodeDec"]] = f"do_{instr['mnemonic']}"
+        dispatch_table["dump"][instr["opcodeDec"]] = f"dump_{instr['mnemonic']}"
+    data["dispatch_table"] = dispatch_table
 
 
 def gen_isa_inc(data: List, file: str) -> None:
     template = env.get_template(f"{file}.j2")
-    output = template.render({"instructions": data})
+    output = template.render(data)
     with open(os.path.join(sys.argv[2], file), 'w') as f:
         f.write(output)
 
@@ -40,11 +53,11 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     isa_data = read_json_data(os.path.join(sys.argv[1], "json/isa.json"))
-    
-    prepare_cpp_code(isa_data)
-    
+    data = {"instructions": isa_data}
+    prepare_cpp_code(data)
+
     file_loader = FileSystemLoader(sys.argv[1])
     env = Environment(loader=file_loader)
 
     for template in sys.argv[3:]:
-        gen_isa_inc(isa_data, os.path.splitext(os.path.basename(template))[0])
+        gen_isa_inc(data, os.path.splitext(os.path.basename(template))[0])

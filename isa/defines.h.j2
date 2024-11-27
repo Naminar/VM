@@ -1,5 +1,0 @@
-#pragma once
-
-{% for instruction in instructions -%}
-#define {{ instruction.opcode_define_name }} {{ instruction.opcodeDec }}
-{% endfor %}

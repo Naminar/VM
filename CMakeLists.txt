@@ -12,6 +12,9 @@ set(ISA_ROOT_DIR "${VM_ROOT_DIR}/isa")
 set(RUNTIME_CORE_ROOT_DIR "${VM_ROOT_DIR}/runtime_core")
 set(TESTS_ROOT_DIR "${VM_ROOT_DIR}/tests")
 
+set(GEN_DIR ${CMAKE_BINARY_DIR}/generated)
+make_directory(${GEN_DIR})
+
 
 add_subdirectory(${ISA_ROOT_DIR})
 add_subdirectory(${RUNTIME_CORE_ROOT_DIR})
@@ -21,5 +24,5 @@ add_subdirectory(${TESTS_ROOT_DIR})
 
 add_custom_target(clang-force-format
     COMMAND find "${ISA_ROOT_DIR}" "${RUNTIME_CORE_ROOT_DIR}" "${TESTS_ROOT_DIR}"
-                -name "*.cpp" -exec clang-format -style='{ColumnLimit: 120}' -i {} +
+                -name "*.cpp" -exec clang-format -style='{ColumnLimit: 120, IndentWidth: 4}' -i {} +
 )
