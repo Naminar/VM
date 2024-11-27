@@ -34,7 +34,7 @@ class Builder {
 
     {% for instruction in instructions -%}
     void create_{{ instruction.mnemonic }}({{ instruction.create_args|join(', ') }}) {
-        if (sizeof(ISA::instr_{{ instruction.mnemonic }}) > _bytecode + _bytecode_len - _ptr) {
+        if (sizeof(ISA::instr_{{ instruction.mnemonic }}) > (_bytecode + _bytecode_len - _ptr) * sizeof(int64_t)) {
             throw std::runtime_error("Can't create_{{ instruction.mnemonic }}, out of memory");
         }
         _ptr += ISA::create_{{ instruction.mnemonic }}({{ (["_ptr"] + instruction.create_arg_names)|join(', ') }});
