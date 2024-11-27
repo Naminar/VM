@@ -12,7 +12,7 @@ Function *CreateStartFunction() {
     // r0 = 10
     builder.create_lmov(10, 0);
     // call fibonacci(r0)
-    builder.create_call(1, 1);
+    builder.create_call(1);
     // r0 = _return_value
     builder.create_lmov_return(0);
     // exit(r0)
@@ -45,13 +45,13 @@ Function *CreateFibonacciFunction() {
     // r3 -> r0
     builder.create_rmov(3, 0);
     // call fibonacci(r0)
-    builder.create_call(1, 1);
+    builder.create_call(1);
     // return value -> r3
     builder.create_lmov_return(3);
     // r4 -> r0
     builder.create_rmov(4, 0);
     // call fibonacci(r0)
-    builder.create_call(1, 1);
+    builder.create_call(1);
     // return value -> r4
     builder.create_lmov_return(4);
     // r5 = r3 + r4

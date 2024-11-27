@@ -31,6 +31,7 @@ def prepare_cpp_code(data: List) -> None:
         instr["logic"] = instr["logic"].replace("_ptr", 'i->_current_frame->_ptr')
         instr["logic"] = instr["logic"].replace("_rc", 'i->_return_code')
         instr["logic"] = instr["logic"].replace("CreateFrame", 'i->CreateFrame')
+        instr["logic"] = instr["logic"].replace("CallFuncById", 'i->CallFuncById')
         instr["logic"] = instr["logic"].replace("ReturnPreviousFrame", 'i->ReturnPreviousFrame')
         instr["logic"] = instr["logic"].replace("_ip", 'ptr')
         instr["opcode_define_name"] = ("OPCODE_" + instr["mnemonic"]).upper()

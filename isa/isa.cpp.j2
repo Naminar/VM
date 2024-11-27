@@ -28,7 +28,7 @@ void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
         {{ instruction.logic }}
         // i->_current_frame->DumpRegs();
     }
-{%- if instruction.mnemonic != 'exit' %}
+{%- if instruction.mnemonic != 'exit' and instruction.mnemonic != 'lreturn' and instruction.mnemonic != 'nop' %}
     return dispatch_do[*ptr](i, ptr);
 {%- endif %}
 }
@@ -69,7 +69,7 @@ void dump_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr, bool dump_a
         }
     }
 
-    {%- if instruction.mnemonic != 'exit' %}
+    {%- if instruction.mnemonic != 'exit' and instruction.mnemonic != 'nop' %}
     return dispatch_dump[*reinterpret_cast<int64_t *>(reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr) + 1)](i,
         reinterpret_cast<int64_t *>(reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr) + 1), true);
     {%- endif %}

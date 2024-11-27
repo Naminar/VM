@@ -252,7 +252,7 @@
                 "type": "RegType"
             }
         ],
-        "logic": "_rv = _arg0; ReturnPreviousFrame(); ptr = _ptr;"
+        "logic": "_rv = _arg0;"
     },
     {
         "opcodeDec": 254,
@@ -262,13 +262,9 @@
             {
                 "type": "FuncIdType",
                 "description": "Function id"
-            },
-            {
-                "type": "RegArgsLenType",
-                "description": "Number of args"
             }
         ],
-        "logic": "_ptr = ptr; CreateFrame(_arg0, _arg1); ptr = _ptr;"
+        "logic": "CallFuncById(_arg0);"
     },
     {
         "opcodeDec": 255,
