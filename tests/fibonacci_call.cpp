@@ -1,32 +1,34 @@
 #include "interpretator.h"
 #include "builder.h"
 
-int main() {
-    Interpretator interpretator;
+
+Function *CreateStartFunction() {
+    Function *start_func = new Function("start_func", 0, 2);
+    start_func->_bytecode = reinterpret_cast<int64_t *>(calloc(1000, 1));
+    start_func->_bytecode_len = 1000;
+
     Builder builder;
-
-    Frame *start_frame = new Frame(2);
-    interpretator._frames.push(start_frame);
-    interpretator._current_frame = start_frame;
-
-    int64_t *start_bytecode = reinterpret_cast<int64_t *>(calloc(1000, 1));
-    interpretator._current_frame->SetPtr(start_bytecode, 1000, start_bytecode);
-    builder.SetPtr(start_bytecode, 1000, start_bytecode);
+    builder.SetPtr(start_func);
     // r0 = 10
     builder.create_lmov(10, 0);
     // call fibonacci(r0)
-    builder.create_call(0, 1);
+    builder.create_call(1, 1);
     // r0 = _return_value
     builder.create_lmov_return(0);
     // exit(r0)
     builder.create_exit(0);
 
-    int64_t func_id = interpretator.CreateFunction("fibonacci", 1 /* n_args */, 6 /* n_regs */);
-    Function *function = interpretator.GetFuncById(func_id);
-    function->_bytecode = (int64_t *)calloc(10000, 1);
-    function->_bytecode_len = 10000;
-    builder.SetPtr(function->_bytecode, function->_bytecode_len, function->_bytecode);
+    return start_func;
+}
 
+
+Function *CreateFibonacciFunction() {
+    Function *function = new Function("fibonacci", 1 /* n_args */, 6 /* n_regs */);
+    function->_bytecode = reinterpret_cast<int64_t *>(calloc(10000, 1));
+    function->_bytecode_len = 10000;
+
+    Builder builder;
+    builder.SetPtr(function);
     // r0 = n
     // r1 = 1
     builder.create_lmov(1, 1);
@@ -43,30 +45,47 @@ int main() {
     // r3 -> r0
     builder.create_rmov(3, 0);
     // call fibonacci(r0)
-    builder.create_call(0, 1);
+    builder.create_call(1, 1);
     // return value -> r3
     builder.create_lmov_return(3);
     // r4 -> r0
     builder.create_rmov(4, 0);
     // call fibonacci(r0)
-    builder.create_call(0, 1);
+    builder.create_call(1, 1);
     // return value -> r4
     builder.create_lmov_return(4);
     // r5 = r3 + r4
     builder.create_ladd(3, 4, 5);
+    // return r5
     builder.create_lreturn(5);
     // exit(r1)
     builder.create_exit(1);
 
-    std::cout << "------------------------" << std::endl;
-    interpretator._current_frame->SetPtr(function->_bytecode, function->_bytecode_len, function->_bytecode);
-    interpretator.Dump();
-    std::cout << "------------------------" << std::endl;
-    interpretator._current_frame->SetPtr(start_bytecode, 1000, start_bytecode);
-    interpretator.Dump();
-    std::cout << "------------------------" << std::endl;
+    return function;
+}
 
-    interpretator._current_frame->SetPtr(start_bytecode, 1000, start_bytecode);
+
+int main() {
+    Function *start_func = CreateStartFunction();
+    Function *function = CreateFibonacciFunction();
+    Interpretator interpretator(start_func);
+    interpretator.AppendFunction(function);
+
+    std::cout << "------------------------" << std::endl;
+    std::cout << "Start function dump:" << std::endl;
+    std::cout << "------------------------" << std::endl;
+    interpretator._current_frame->SetPtr(start_func);
+    interpretator.Dump();
+    std::cout << "------------------------" << std::endl;
+    std::cout << "Fibonacci function dump:" << std::endl;
+    std::cout << "------------------------" << std::endl;
+    interpretator._current_frame->SetPtr(function);
+    interpretator.Dump();
+    std::cout << "------------------------" << std::endl;
+    std::cout << "Runtime trace dump:" << std::endl;
+    std::cout << "------------------------" << std::endl;
+    interpretator._current_frame->SetPtr(start_func);
     int64_t rc = interpretator.Run();
-    std::cout << "---\nResult: " << rc << std::endl;
+    std::cout << "------------------------" << std::endl;
+    std::cout << "Result: " << rc << std::endl;
 }
