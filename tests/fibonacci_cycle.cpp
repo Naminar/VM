@@ -1,11 +1,8 @@
-#include "interpretator.h"
 #include "builder.h"
-
+#include "interpretator.h"
 
 Function *CreateStartFunction() {
-    Function *start_func = new Function("start_func", 0, 6);
-    start_func->_bytecode = reinterpret_cast<int64_t *>(calloc(1000, 1));
-    start_func->_bytecode_len = 1000;
+    Function *start_func = new Function("start_func", 0, 6, 1000);
 
     Builder builder;
     builder.SetPtr(start_func);
@@ -34,7 +31,6 @@ Function *CreateStartFunction() {
 
     return start_func;
 }
-
 
 int main() {
     Interpretator interpretator(CreateStartFunction());

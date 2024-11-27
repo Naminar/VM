@@ -24,7 +24,7 @@ def prepare_cpp_code(data: List) -> None:
             instr["create_arg_names"].append(f"arg{i} /* {arg['type']} */")
 
             if arg["type"] == "RegType":
-                instr["logic"] = instr["logic"].replace(f"_arg{i}", f"i->GetRegRef(_arg{i})")
+                instr["logic"] = instr["logic"].replace(f"_arg{i}", f"i->_current_frame->_regs[_arg{i}]")
 
         instr["logic"] = instr["logic"].replace("_arg", 'instr_struct->_arg')
         instr["logic"] = instr["logic"].replace("_rv", 'i->_current_frame->_return_value')

@@ -1,11 +1,8 @@
-#include "interpretator.h"
 #include "builder.h"
-
+#include "interpretator.h"
 
 Function *CreateStartFunction() {
-    Function *start_func = new Function("start_func", 0, 2);
-    start_func->_bytecode = reinterpret_cast<int64_t *>(calloc(1000, 1));
-    start_func->_bytecode_len = 1000;
+    Function *start_func = new Function("start_func", 0, 2, 1000);
 
     Builder builder;
     builder.SetPtr(start_func);
@@ -21,11 +18,8 @@ Function *CreateStartFunction() {
     return start_func;
 }
 
-
 Function *CreateFibonacciFunction() {
-    Function *function = new Function("fibonacci", 1 /* n_args */, 6 /* n_regs */);
-    function->_bytecode = reinterpret_cast<int64_t *>(calloc(10000, 1));
-    function->_bytecode_len = 10000;
+    Function *function = new Function("fibonacci", 1 /* n_args */, 6 /* n_regs */, 10000);
 
     Builder builder;
     builder.SetPtr(function);
@@ -63,7 +57,6 @@ Function *CreateFibonacciFunction() {
 
     return function;
 }
-
 
 int main() {
     Function *start_func = CreateStartFunction();
