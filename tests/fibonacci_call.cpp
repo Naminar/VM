@@ -81,4 +81,5 @@ int main() {
     int64_t rc = interpretator.Run();
     std::cout << "------------------------" << std::endl;
     std::cout << "Result: " << rc << std::endl;
+    std::cout << "Total instructions: " << ISA::done_instructions << std::endl;
 }

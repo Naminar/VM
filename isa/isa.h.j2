@@ -53,6 +53,7 @@ int64_t create_{{ instruction.mnemonic }}({{ (["int64_t *ptr"] + instruction.cre
 // ---------------------------------------------------------------------------------------------------------------------
 extern void (*const dispatch_do[256])(Interpretator *, int64_t *);
 extern void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool);
+extern uint64_t done_instructions;
 // ---------------------------------------------------------------------------------------------------------------------
 
 } // namespace ISA

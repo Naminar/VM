@@ -3,8 +3,21 @@
 
 namespace ISA {
 
+
+void CatchDoNullPtr(Interpretator *i, int64_t *ptr) {
+    std::cout << "Cought nullptr DO instr!" << std::endl;
+    throw std::runtime_error("Nullptr");
+}
+
+void CatchDumpNullPtr(Interpretator *i, int64_t *ptr, bool dump_all) {
+    std::cout << "Cought nullptr DUMP instr!" << std::endl;
+    throw std::runtime_error("Nullptr");
+}
+
+
 void (*const dispatch_do[256])(Interpretator *, int64_t *) = { {{ dispatch_table.do|join(', ') }} };
 void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool) = { {{ dispatch_table.dump|join(', ') }} };
+uint64_t done_instructions = 0;
 
 
 {% for instruction in instructions -%}
@@ -12,6 +25,7 @@ void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool) = { {{ dispat
 // ---------------------------------------------------------------------------------------------------------------------
 void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
     {
+        ++done_instructions;
         if ((i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr) * sizeof(int64_t)
                                                                             < sizeof(instr_{{ instruction.mnemonic }})) {
             throw std::runtime_error("Out of memory in do_{{ instruction.mnemonic }}");
@@ -23,7 +37,7 @@ void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
 
         instr_{{ instruction.mnemonic }} *instr_struct = reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr);
 
-        dump_{{ instruction.mnemonic }}(i, ptr, false);
+        // dump_{{ instruction.mnemonic }}(i, ptr, false);
         ptr = reinterpret_cast<int64_t *>(reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr) + 1);
         {{ instruction.logic }}
         // i->_current_frame->DumpRegs();
@@ -45,7 +59,7 @@ void dump_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr, bool dump_a
         }
 
         instr_{{ instruction.mnemonic }} *instr_struct = reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr);
-        std::cout << (ptr - i->_current_frame->_bytecode) << ": {{ instruction.mnemonic }}";
+        std::cout << ptr - i->_current_frame->_bytecode << ": {{ instruction.mnemonic }}";
 
 {%- for arg in instruction.args %}
     {%- if arg["type"] == 'RegType' %}

@@ -13,7 +13,7 @@ class Function {
         _bytecode(new int64_t[bytecode_len_in_int64]) {}
 
     ~Function() {
-        delete _bytecode;
+        delete[] _bytecode;
     }
 
     // TODO: dump bytecode

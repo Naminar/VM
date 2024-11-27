@@ -12,15 +12,15 @@ def read_json_data(filepath: str) -> List:
 
 def prepare_cpp_code(data: List) -> None:
     dispatch_table = {}
-    dispatch_table["do"] = ["nullptr" for i in range(256)]
-    dispatch_table["dump"] = ["nullptr" for i in range(256)]
+    dispatch_table["do"] = ["CatchDoNullPtr" for i in range(256)]
+    dispatch_table["dump"] = ["CatchDumpNullPtr" for i in range(256)]
     for instr in data["instructions"]:
         instr["create_args"] = []
         instr["create_arg_names"] = []
         instr["len_in_int64"] = 1
         for i, arg in enumerate(instr["args"]):
             instr["len_in_int64"] += 1
-            instr["create_args"].append(f"uint64_t arg{i} /* {arg['type']} */")
+            instr["create_args"].append(f"int64_t arg{i} /* {arg['type']} */")
             instr["create_arg_names"].append(f"arg{i} /* {arg['type']} */")
 
             if arg["type"] == "RegType":
