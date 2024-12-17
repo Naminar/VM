@@ -1,20 +1,16 @@
 #pragma once
-#include <string>
 #include <cstdint>
+#include <string>
+#include <iostream>
 
 class Function {
   public:
     // TODO: Calloc -> new
-    Function(const std::string &name, int64_t n_args, int64_t n_regs, int64_t bytecode_len_in_int64):
-        _name(name),
-        _n_args(n_args),
-        _n_regs(n_regs),
-        _bytecode_len(bytecode_len_in_int64),
-        _bytecode(new int64_t[bytecode_len_in_int64]) {}
+    Function(const std::string &name, int64_t n_args, int64_t n_regs, int64_t bytecode_len_in_int64)
+        : _name(name), _n_args(n_args), _n_regs(n_regs), _bytecode_len(bytecode_len_in_int64),
+          _bytecode(new int64_t[bytecode_len_in_int64]) {}
 
-    ~Function() {
-        delete[] _bytecode;
-    }
+    ~Function() { delete[] _bytecode; }
 
     // TODO: dump bytecode
     void Dump() {
@@ -27,7 +23,7 @@ class Function {
         // std::cout << "Bytecode: " << std::endl;
     }
 
-    int64_t *const _bytecode = nullptr;   // owner
+    int64_t *const _bytecode = nullptr; // owner
     const int64_t _bytecode_len = 0;
     const std::string _name = "";
     const int64_t _n_args = 0;

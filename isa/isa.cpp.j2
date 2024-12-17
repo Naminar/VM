@@ -37,10 +37,10 @@ void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
 
         instr_{{ instruction.mnemonic }} *instr_struct = reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr);
 
-        // dump_{{ instruction.mnemonic }}(i, ptr, false);
+        dump_{{ instruction.mnemonic }}(i, ptr, false);
         ptr = reinterpret_cast<int64_t *>(reinterpret_cast<instr_{{ instruction.mnemonic }} *>(ptr) + 1);
         {{ instruction.logic }}
-        // i->_current_frame->DumpRegs();
+        i->_current_frame->DumpRegs();
     }
 {%- if instruction.mnemonic != 'exit' and instruction.mnemonic != 'lreturn' and instruction.mnemonic != 'nop' %}
     return dispatch_do[*ptr](i, ptr);

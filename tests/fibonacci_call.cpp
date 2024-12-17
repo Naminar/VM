@@ -7,7 +7,7 @@ Function *CreateStartFunction() {
     Builder builder;
     builder.SetPtr(start_func);
     // r0 = 10
-    builder.create_lmov(10, 0);
+    builder.create_lmov(4, 0);
     // call fibonacci(r0)
     builder.create_call(1);
     // r0 = _return_value
