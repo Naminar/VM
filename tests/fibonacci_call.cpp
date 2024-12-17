@@ -59,26 +59,27 @@ Function *CreateFibonacciFunction() {
 }
 
 int main() {
+    Interpretator interpretator;
     Function *start_func = CreateStartFunction();
     Function *function = CreateFibonacciFunction();
-    Interpretator interpretator(start_func);
-    interpretator.AppendFunction(function);
+    IntrThread *thread = interpretator.CreateThread(start_func);
+    thread->AppendFunction(function);
 
     std::cout << "------------------------" << std::endl;
     std::cout << "Start function dump:" << std::endl;
     std::cout << "------------------------" << std::endl;
-    interpretator._current_frame->SetPtr(start_func);
-    interpretator.Dump();
+    thread->_current_frame->SetPtr(start_func);
+    thread->Dump();
     std::cout << "------------------------" << std::endl;
     std::cout << "Fibonacci function dump:" << std::endl;
     std::cout << "------------------------" << std::endl;
-    interpretator._current_frame->SetPtr(function);
-    interpretator.Dump();
+    thread->_current_frame->SetPtr(function);
+    thread->Dump();
     std::cout << "------------------------" << std::endl;
     std::cout << "Runtime trace dump:" << std::endl;
     std::cout << "------------------------" << std::endl;
-    interpretator._current_frame->SetPtr(start_func);
-    int64_t rc = interpretator.Run();
+    thread->_current_frame->SetPtr(start_func);
+    int64_t rc = interpretator.StartThread();
     std::cout << "------------------------" << std::endl;
     std::cout << "Result: " << rc << std::endl;
     std::cout << "Total instructions: " << ISA::done_instructions << std::endl;

@@ -2,7 +2,7 @@
 #include <cstdint>
 
 
-class Interpretator;
+class IntrThread;
 
 
 // Defines
@@ -42,8 +42,8 @@ struct instr_{{ instruction.mnemonic }} {
 // Executor api declaration
 // ---------------------------------------------------------------------------------------------------------------------
 {% for instruction in instructions -%}
-void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr);
-void dump_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr, bool dump_all = true);
+void do_{{ instruction.mnemonic }}(IntrThread *i, int64_t *ptr);
+void dump_{{ instruction.mnemonic }}(IntrThread *i, int64_t *ptr, bool dump_all = true);
 int64_t create_{{ instruction.mnemonic }}({{ (["int64_t *ptr"] + instruction.create_args)|join(', ') }});
 {% endfor -%}
 // ---------------------------------------------------------------------------------------------------------------------
@@ -51,8 +51,8 @@ int64_t create_{{ instruction.mnemonic }}({{ (["int64_t *ptr"] + instruction.cre
 
 // Dispatch table
 // ---------------------------------------------------------------------------------------------------------------------
-extern void (*const dispatch_do[256])(Interpretator *, int64_t *);
-extern void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool);
+extern void (*const dispatch_do[256])(IntrThread *, int64_t *);
+extern void (*const dispatch_dump[256])(IntrThread *, int64_t *, bool);
 extern uint64_t done_instructions;
 // ---------------------------------------------------------------------------------------------------------------------
 

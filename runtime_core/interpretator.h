@@ -5,14 +5,15 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <queue>
 
 class Function;
 
-class Interpretator {
+class IntrThread {
   public:
     FrameAllocator<> frame_allocator;
 
-    Interpretator(Function *start_func) {
+    IntrThread(Function *start_func) {
         if (start_func->_n_args != 0) {
             throw std::runtime_error("Start func should be without arguments!");
         }
@@ -22,7 +23,7 @@ class Interpretator {
         _current_frame = frame_allocator.allocate(start_func);
     }
 
-    ~Interpretator() { frame_allocator.deallocate(); }
+    ~IntrThread() { frame_allocator.deallocate(); }
 
     int64_t Run() {
         _current_frame->Run(this);
@@ -62,4 +63,20 @@ class Interpretator {
     Frame *_current_frame;
     std::vector<Function *> _functions;
     int64_t _return_code = 0; // from whole program
+};
+
+class Interpretator {
+    std::queue<IntrThread *> _threads;
+    public:
+    IntrThread* CreateThread(Function *start_func) {
+        IntrThread* thread = new IntrThread(start_func);
+        if (thread == nullptr)
+            throw std::runtime_error("Can't create thread.");
+        _threads.push(thread);
+        return thread;
+    }
+
+    int64_t StartThread() {
+        return _threads.back()->Run();
+    }
 };

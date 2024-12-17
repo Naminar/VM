@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stack>
 
-class Interpretator;
+class IntrThread;
 
 class Frame {
   public:
@@ -30,12 +30,12 @@ class Frame {
         _ptr = func->_bytecode;
     }
 
-    inline int64_t Run(Interpretator *i) {
+    inline int64_t Run(IntrThread *i) {
         ISA::dispatch_do[*_ptr](i, _ptr);
         return _return_value;
     }
 
-    inline void Dump(Interpretator *i) { ISA::dispatch_dump[*_ptr](i, _ptr, true); }
+    inline void Dump(IntrThread *i) { ISA::dispatch_dump[*_ptr](i, _ptr, true); }
 
     int64_t *const _regs = nullptr; // owner
     const int64_t _n_regs = 0;
