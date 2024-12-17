@@ -1,7 +1,9 @@
 #pragma once
-#include <iostream>
 #include "function.h"
 #include "isa.h"
+#include <iostream>
+#include <stack>
+#include <iomanip>
 
 class Interpretator;
 
@@ -40,11 +42,92 @@ class Frame {
         ISA::dispatch_dump[*_ptr](i, _ptr, true);
     }
 
-    int64_t *const _regs = nullptr;   // owner
-    const int64_t _n_regs = 0;
+    void DumpMySelf() {
+        std::cout << "Frame dump:" << this << std::endl;
+        std::cout << std::setw(15)<< "-regs "           << std::setw(20) << _regs << std::endl;
+        std::cout << std::setw(15) << "_n_regs "        << std::setw(20) << _n_regs << std::endl;
+        std::cout << std::setw(15) << "_bytecode "      << std::setw(20) << _bytecode << std::endl;
+        std::cout << std::setw(15) << "_ptr "           << std::setw(20) << _ptr << std::endl;
+        std::cout << std::setw(15) << "_bytecode_len "  << std::setw(20) << _bytecode_len << std::endl;
+        std::cout << std::setw(15) << "_return_value "  << std::setw(20) << _return_value << std::endl;
+        std::cout << std::setw(15) << "previous_frame " << std::setw(20) << previous_frame << std::endl;
+        std::cout << std::setw(15) << "------------------------" << std::endl;
+    }
+
+    int64_t *_regs = nullptr; // owner
+    int64_t _n_regs = 0;
     int64_t *_bytecode = nullptr;
     int64_t *_ptr = nullptr;
     int64_t _bytecode_len = 0;
     int64_t _return_value = 0;
     Frame *previous_frame = nullptr;
+};
+
+template <uint64_t memorySize> class FrameAllocator {
+private:
+  char *_memory;
+  char *_availablePtr;
+  std::stack<char *> _framesStart;
+  uint64_t _framesAllocated = 0;
+
+public:
+  FrameAllocator() {
+    _memory = new char[memorySize];
+    if (_memory == nullptr)
+      throw std::runtime_error("Impossible to allocate memory for frames.");
+    _availablePtr = _memory;
+  }
+
+  Frame *allocate(Interpretator *i, Frame *current_frame, Function *function) {
+    // check availability to allocate
+    if (_availablePtr + sizeof(Frame) +
+            function->_n_args * sizeof(current_frame->_regs[0]) >
+        _memory + memorySize)
+      throw std::runtime_error(
+          "Impossible to allocate frame. Total allocated: " +
+          std::to_string(_framesAllocated) +
+          ". Memory used(bytes): " + std::to_string(_availablePtr - _memory));
+
+    _framesAllocated++;
+    // std::cout << "Frames allocated: " << _framesAllocated << std::endl;
+    // save current pointer
+    _framesStart.push(_availablePtr);
+
+    // creating frame header
+    Frame *new_frame = reinterpret_cast<Frame *>(_availablePtr);
+    _availablePtr += sizeof(Frame);
+
+    // allocate and set regs
+    new_frame->_regs =
+        reinterpret_cast<decltype(current_frame->_regs)>(_availablePtr);
+    _availablePtr += function->_n_args * sizeof(current_frame->_regs[0]);
+    new_frame->_n_regs = function->_n_regs;
+    memcpy(new_frame->_regs, current_frame->_regs,
+           function->_n_args * sizeof(current_frame->_regs[0]));
+
+    // set bytecode
+    new_frame->SetPtr(function);
+
+    // save
+    new_frame->previous_frame = current_frame;
+    current_frame->DumpMySelf();
+    new_frame->DumpMySelf();
+
+    return new_frame;
+  }
+
+  Frame *deallocate() {
+    _availablePtr = _framesStart.top();
+    _framesStart.pop();
+
+    char *previous_frame = nullptr;
+    if (!_framesStart.empty()) {
+      previous_frame = _framesStart.top();
+      reinterpret_cast<Frame *>(previous_frame)->_return_value =
+          reinterpret_cast<Frame *>(_availablePtr)->_return_value;
+    }
+    return reinterpret_cast<Frame *>(previous_frame);
+  }
+
+  ~FrameAllocator() { delete[] _memory; }
 };
