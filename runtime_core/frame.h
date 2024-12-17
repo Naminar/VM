@@ -118,7 +118,11 @@ public:
     // save
     new_frame->previous_frame = current_frame;
     
-    if (current_frame) current_frame->DumpMySelf();
+    if (current_frame) {
+      std::cout << "current frame::" << std::endl;
+      current_frame->DumpMySelf();
+      }
+    std::cout << "new frame::" << std::endl;
     new_frame->DumpMySelf();
 
     return new_frame;
@@ -133,7 +137,10 @@ public:
       previous_frame = _framesStart.top();
       reinterpret_cast<Frame *>(previous_frame)->_return_value =
           reinterpret_cast<Frame *>(_availablePtr)->_return_value;
+      std::cout << "deallocated frame" << reinterpret_cast<Frame *>(_availablePtr) <<  std::endl;
+      std::cout << "now frame" << reinterpret_cast<Frame *>(_availablePtr)->previous_frame << std::endl;
     }
+    assert(reinterpret_cast<Frame *>(previous_frame) == reinterpret_cast<Frame *>(_availablePtr)->previous_frame);
     return reinterpret_cast<Frame *>(previous_frame);
   }
 

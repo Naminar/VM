@@ -65,9 +65,7 @@ class Interpretator {
 
         _current_frame =
             frame_allocator.allocate(this, _current_frame, _functions[func_id]);
-        std::cout << "Call function" << std::endl;
         _current_frame->Run(this);
-        std::cout << "Stop calling function" << std::endl;
         _current_frame = frame_allocator.deallocate();
     }
 
