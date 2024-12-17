@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdint>
+#include <cassert>
 #include "isa.h"
 #include "frame.h"
 
@@ -17,11 +18,11 @@ class Interpretator {
             throw std::runtime_error("Start func should be without arguments!");
         }
         _functions.push_back(start_func);
-        _current_frame = new Frame(start_func); // start frame
+        _current_frame = frame_allocator.allocate(this, nullptr, start_func);//new Frame(start_func); // start frame
     }
 
     ~Interpretator() {
-        delete _current_frame;
+        //delete _current_frame;
     }
 
 
@@ -64,7 +65,9 @@ class Interpretator {
 
         _current_frame =
             frame_allocator.allocate(this, _current_frame, _functions[func_id]);
+        std::cout << "Call function" << std::endl;
         _current_frame->Run(this);
+        std::cout << "Stop calling function" << std::endl;
         _current_frame = frame_allocator.deallocate();
     }
 

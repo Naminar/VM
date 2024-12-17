@@ -26,6 +26,13 @@ uint64_t done_instructions = 0;
 void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
     {
         ++done_instructions;
+        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        std::cout << "Hello here!" << std::endl;
+        std::cout << " " << static_cast<void*>(i) << std::endl;
+        std::cout << static_cast<void*>(i->_current_frame) << " " << std::endl;
+        std::cout << i->_current_frame->_bytecode << " " << std::endl;
+        std::cout << i->_current_frame->_bytecode_len << " " << std::endl;
+        std::cout << i->_current_frame->_ptr << std::endl;
         if ((i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr) * sizeof(int64_t)
                                                                             < sizeof(instr_{{ instruction.mnemonic }})) {
             throw std::runtime_error("Out of memory in do_{{ instruction.mnemonic }}");

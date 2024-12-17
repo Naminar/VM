@@ -7,6 +7,8 @@
 
 class Interpretator;
 
+using regs_t = int64_t;
+
 class Frame {
   public:
     Frame(const Function *func):  _n_regs(func->_n_regs), _regs(new int64_t[func->_n_regs]) {
@@ -53,7 +55,6 @@ class Frame {
         std::cout << std::setw(15) << "previous_frame " << std::setw(20) << previous_frame << std::endl;
         std::cout << std::setw(15) << "------------------------" << std::endl;
     }
-
     int64_t *_regs = nullptr; // owner
     int64_t _n_regs = 0;
     int64_t *_bytecode = nullptr;
@@ -81,7 +82,7 @@ public:
   Frame *allocate(Interpretator *i, Frame *current_frame, Function *function) {
     // check availability to allocate
     if (_availablePtr + sizeof(Frame) +
-            function->_n_args * sizeof(current_frame->_regs[0]) >
+            function->_n_args * sizeof(regs_t)>
         _memory + memorySize)
       throw std::runtime_error(
           "Impossible to allocate frame. Total allocated: " +
@@ -99,18 +100,25 @@ public:
 
     // allocate and set regs
     new_frame->_regs =
-        reinterpret_cast<decltype(current_frame->_regs)>(_availablePtr);
-    _availablePtr += function->_n_args * sizeof(current_frame->_regs[0]);
+        reinterpret_cast<regs_t*>(_availablePtr);
+    if (current_frame)
+      _availablePtr += function->_n_args * sizeof(regs_t);
+    else
+      _availablePtr += function->_n_regs * sizeof(regs_t);
+    
     new_frame->_n_regs = function->_n_regs;
+    
+    if (current_frame)
     memcpy(new_frame->_regs, current_frame->_regs,
-           function->_n_args * sizeof(current_frame->_regs[0]));
+           function->_n_args * sizeof(regs_t));
 
     // set bytecode
     new_frame->SetPtr(function);
 
     // save
     new_frame->previous_frame = current_frame;
-    current_frame->DumpMySelf();
+    
+    if (current_frame) current_frame->DumpMySelf();
     new_frame->DumpMySelf();
 
     return new_frame;
