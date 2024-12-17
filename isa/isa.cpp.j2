@@ -4,26 +4,26 @@
 namespace ISA {
 
 
-void CatchDoNullPtr(Interpretator *i, int64_t *ptr) {
+void CatchDoNullPtr(IntrThread *i, int64_t *ptr) {
     std::cout << "Cought nullptr DO instr!" << std::endl;
     throw std::runtime_error("Nullptr");
 }
 
-void CatchDumpNullPtr(Interpretator *i, int64_t *ptr, bool dump_all) {
+void CatchDumpNullPtr(IntrThread *i, int64_t *ptr, bool dump_all) {
     std::cout << "Cought nullptr DUMP instr!" << std::endl;
     throw std::runtime_error("Nullptr");
 }
 
 
-void (*const dispatch_do[256])(Interpretator *, int64_t *) = { {{ dispatch_table.do|join(', ') }} };
-void (*const dispatch_dump[256])(Interpretator *, int64_t *, bool) = { {{ dispatch_table.dump|join(', ') }} };
+void (*const dispatch_do[256])(IntrThread *, int64_t *) = { {{ dispatch_table.do|join(', ') }} };
+void (*const dispatch_dump[256])(IntrThread *, int64_t *, bool) = { {{ dispatch_table.dump|join(', ') }} };
 uint64_t done_instructions = 0;
 
 
 {% for instruction in instructions -%}
 // Instruction: '{{ instruction.mnemonic }}'
 // ---------------------------------------------------------------------------------------------------------------------
-void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
+void do_{{ instruction.mnemonic }}(IntrThread *i, int64_t *ptr) {
     {
         ++done_instructions;
         if ((i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr) * sizeof(int64_t)
@@ -47,7 +47,7 @@ void do_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr) {
 {%- endif %}
 }
 
-void dump_{{ instruction.mnemonic }}(Interpretator *i, int64_t *ptr, bool dump_all) {
+void dump_{{ instruction.mnemonic }}(IntrThread *i, int64_t *ptr, bool dump_all) {
     {
         if ((i->_current_frame->_bytecode + i->_current_frame->_bytecode_len - i->_current_frame->_ptr) * sizeof(int64_t)
                                                                             < sizeof(instr_{{ instruction.mnemonic }})) {

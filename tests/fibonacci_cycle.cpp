@@ -33,15 +33,17 @@ Function *CreateStartFunction() {
 }
 
 int main() {
-    Interpretator interpretator(CreateStartFunction());
+    Interpretator interpretator;
+    Function *start_func = CreateStartFunction();
+    IntrThread *thread = interpretator.CreateThread(start_func);
     std::cout << "------------------------" << std::endl;
     std::cout << "Bytecode dump:" << std::endl;
     std::cout << "------------------------" << std::endl;
-    interpretator.Dump();
+    thread->Dump();
     std::cout << "------------------------" << std::endl;
     std::cout << "Runtime trace:" << std::endl;
     std::cout << "------------------------" << std::endl;
-    int64_t rc = interpretator.Run();
+    int64_t rc = interpretator.StartThread();
     std::cout << "------------------------" << std::endl;
     std::cout << "Result: " << rc << std::endl;
     std::cout << "Total instructions: " << ISA::done_instructions << std::endl;

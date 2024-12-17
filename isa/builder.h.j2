@@ -28,7 +28,7 @@ class Builder {
         _ptr = func->_bytecode;
     }
 
-    inline void SetPtr(Interpretator *i) {
+    inline void SetPtr(IntrThread *i) {
         SetPtr(i->_current_frame);
     }
 
