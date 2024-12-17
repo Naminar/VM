@@ -24,5 +24,5 @@ add_subdirectory(${TESTS_ROOT_DIR})
 
 add_custom_target(clang-force-format
     COMMAND find "${ISA_ROOT_DIR}" "${RUNTIME_CORE_ROOT_DIR}" "${TESTS_ROOT_DIR}"
-                -name "*.h" -exec clang-format -style='{ColumnLimit: 120, IndentWidth: 4}' -i {} +
+                -name "*.cpp" -exec clang-format -style='{ColumnLimit: 120, IndentWidth: 4}' -i {} +
 )

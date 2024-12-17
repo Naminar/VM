@@ -8,7 +8,6 @@ class Interpretator;
 
 class Frame {
   public:
-    // Frame(const Function *func) : _n_regs(func->_n_regs) { SetPtr(func); }
     Frame(const Function *func, int64_t *const regs) : _n_regs(func->_n_regs), _regs(regs) { SetPtr(func); }
     ~Frame() {}
 
