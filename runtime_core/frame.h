@@ -52,7 +52,6 @@ template <uint64_t memorySize = 100'000> class FrameAllocator {
     char *_memory;
     char *_availablePtr;
     std::stack<char *> _framesStart;
-    uint64_t _framesAllocated = 0;
 
   public:
     FrameAllocator() {
@@ -66,12 +65,9 @@ template <uint64_t memorySize = 100'000> class FrameAllocator {
     Frame *allocate(Function *function) {
         // check availability to allocate
         if (_availablePtr + sizeof(Frame) + function->_n_args * sizeof(int64_t) > _memory + memorySize) {
-            throw std::runtime_error(
-                "Impossible to allocate frame. Total allocated: " + std::to_string(_framesAllocated) +
-                ". Memory used(bytes): " + std::to_string(_availablePtr - _memory));
+            throw std::runtime_error("Impossible to allocate frame. Memory used(bytes): " +
+                                     std::to_string(_availablePtr - _memory));
         }
-
-        _framesAllocated++;
 
         // save current pointer
         _framesStart.push(_availablePtr);

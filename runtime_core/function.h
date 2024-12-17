@@ -5,7 +5,6 @@
 
 class Function {
   public:
-    // TODO: Calloc -> new
     Function(const std::string &name, int64_t n_args, int64_t n_regs, int64_t bytecode_len_in_int64)
         : _name(name), _n_args(n_args), _n_regs(n_regs), _bytecode_len(bytecode_len_in_int64),
           _bytecode(new int64_t[bytecode_len_in_int64]) {}
